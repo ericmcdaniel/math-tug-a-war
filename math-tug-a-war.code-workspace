@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "./backend-api",
+		},
+		{
+			"path": "./frontend-ui"
+		},
+		{
+			"path": "./",
+			"name": "root"
+		},
+	],
+	"settings": {
+		"java.compile.nullAnalysis.mode": "automatic"
+	}
+}
