@@ -1,8 +1,8 @@
 {
   "files.exclude": {
     "**/.git": true,
-    "backend-api": true,
-    "frontend-ui": true,
-    ".vscode": true,
+    "**/backend-api": true,
+    "**/frontend-ui": true,
+    "**/.vscode": true,
   },
 }
