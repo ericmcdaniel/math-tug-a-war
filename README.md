@@ -12,7 +12,7 @@ This is a full-stack web application designed, architected, developed, tested, d
 There is a *ton* more to fill out here, but I'm just laying out the groundwork. The general project structure is:
 
 ```
-           /‾‾‾ backend-api/ => Contains the Java Spring Boot API layer
+           /‾‾‾ /backend-api => Contains the Java Spring Boot API layer
 (root) --> ⎸
-           \___ frontend-ui/  => Contains the Vite TypeScript frontend layer
+           \___ /frontend-ui => Contains the Vite TypeScript frontend layer
 ```
