@@ -1,9 +1,8 @@
-import { defineConfig } from "vite";
-import { resolve } from "path";
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 const root = resolve(__dirname, 'src');
-const outDir = resolve(__dirname, 'dist');
-
+const outDir = resolve(__dirname, '..', 'docs');
 
 export default defineConfig({
   root,
@@ -15,5 +14,6 @@ export default defineConfig({
         main: resolve(root, 'index.html')
       }
     }
-  }
+  },
+  base: '/math-tug-a-war/',
 });
