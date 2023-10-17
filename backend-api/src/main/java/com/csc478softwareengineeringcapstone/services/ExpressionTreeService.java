@@ -1,14 +1,17 @@
-package com.csc478softwareengineeringcapstone;
+package com.csc478softwareengineeringcapstone.services;
+
+import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-public class ExpressionTree {
+@Service
+public class ExpressionTreeService {
     private Node root;
     private String[] operators = { "+", "-", "*", "/" };
     private Random rand = new Random();
 
-    public ExpressionTree(int depth) {
-        this.root = generateNode(depth, true);
+    public ExpressionTreeService() {
+        this.root = null;
     }
 
     public Node getRoot() {
@@ -16,9 +19,17 @@ public class ExpressionTree {
         return this.root;
     }
 
+    public void setRoot(int depth) {
+        this.root = generateNode(depth, true);
+    }
+
     // This creates the actual tree, the boolean is to force an operator for the
     // root.
     private Node generateNode(int depth, boolean firstInvocation) {
+
+        // if (root == null) {
+        //     setRoot(depth);
+        // }
 
         // Force leafs to be a number between 1 and 9
         if (depth == 0) {
@@ -78,7 +89,8 @@ public class ExpressionTree {
         }
     }
 
-    public String generateExpression() {
+    public String generateExpression(int depth) {
+        this.root = generateNode(depth, true);
         return inOrderTraversal(this.root);
     }
 

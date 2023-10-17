@@ -1,95 +1,14 @@
 package com.csc478softwareengineeringcapstone;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootApplication
-@RestController
-
+@SpringBootApplication(scanBasePackages = {
+    "com.csc478softwareengineeringcapstone.controllers",
+    "com.csc478softwareengineeringcapstone.services.ExpressionTreeService" })
 public class MathTugAWarApplication {
-
-  private static Map<String, Object> equationsMap = new HashMap<>();
 
   public static void main(String[] args) {
     SpringApplication.run(MathTugAWarApplication.class, args);
   }
-
-  @GetMapping("/generate-equation")
-  public Map<String, Object> generateEquation() {
-    ExpressionTree tree = new ExpressionTree(3);
-    String equation = tree.generateExpression();
-    double result = tree.evaluate(tree.getRoot());
-
-    // Generating a unique ID for the equation
-    String equationID = UUID.randomUUID().toString();
-    Map<String, Object> equationData = new HashMap<>();
-    equationData.put("equation", equation);
-    equationData.put("result", result);
-
-    // Storing the generated equation and its result in the map
-    equationsMap.put(equationID, equationData);
-
-    Map<String, Object> response = new HashMap<>();
-    response.put("equationID", equationID);
-    response.put("equation", equation);
-    response.put("http_status", 200);
-
-    return response;
-  }
-
-  @PostMapping("/validate-answer")
-  public Map<String, Object> validateAnswer(@RequestBody Map<String, Object> requestBody) {
-    String equationID = (String) requestBody.get("equationID");
-    double providedAnswer = Double.parseDouble((String) requestBody.get("answer"));
-
-    Map<String, Object> equationData = (Map<String, Object>) equationsMap.get(equationID);
-    if (equationData == null) {
-      Map<String, Object> errorResponse = new HashMap<>();
-      errorResponse.put("message", "Invalid equation ID");
-      errorResponse.put("http_status", 400);
-      return errorResponse;
-    }
-
-    double correctResult = (double) equationData.get("result");
-    Map<String, Object> response = new HashMap<>();
-    if (providedAnswer == correctResult) {
-      response.put("message", "Correct answer");
-      response.put("http_status", 200);
-    } else {
-      response.put("message", "Incorrect answer");
-      response.put("http_status", 200);
-    }
-
-    return response;
-  }
-
-  @GetMapping("/hello")
-  public Map<String, Object> hello(@RequestParam(value = "name", defaultValue = "CSC 478 Group 9") String name) {
-
-    /*
-     * We want to return a JSON object and not raw text. Hashmaps are perfect for
-     * this.
-     * The response data will look like:
-     * {
-     * "response": "Hello, <dynamically injected data>",
-     * "http_status": 200
-     * }
-     */
-    Map<String, Object> map = new HashMap<>();
-
-    map.put("response", String.format("Hello %s!", name));
-    map.put("http_status", 200);
-
-    return map;
-  }
-
 }
