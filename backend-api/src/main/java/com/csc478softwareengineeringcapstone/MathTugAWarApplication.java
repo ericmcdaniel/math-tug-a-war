@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
     "com.csc478softwareengineeringcapstone.controllers",
-    "com.csc478softwareengineeringcapstone.services.ExpressionTreeService" })
+    "com.csc478softwareengineeringcapstone.services" })
 public class MathTugAWarApplication {
 
   public static void main(String[] args) {

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,11 +18,13 @@ public class MathExpressionController {
 
   private static Map<String, Object> equationsMap = new HashMap<>();
 
+  @Autowired
+  private ExpressionTreeService treeService;
+
   @GetMapping("/generate-equation")
   public Map<String, Object> generateEquation(
-      @RequestParam(value = "difficulty", defaultValue = "3") String difficulty,
-      ExpressionTreeService treeService) {
-    String equation = treeService.generateExpression(Integer.parseInt(difficulty));
+      @RequestParam(value = "difficulty", defaultValue = "3") int difficulty) {
+    String equation = treeService.generateExpression(difficulty);
     double result = treeService.evaluate(treeService.getRoot());
 
     // Generating a unique ID for the equation

@@ -2,16 +2,15 @@ package com.csc478softwareengineeringcapstone.services;
 
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
-
 @Service
 public class ExpressionTreeService {
     private Node root;
     private String[] operators = { "+", "-", "*", "/" };
-    private Random rand = new Random();
+    private RandomInt random;
 
-    public ExpressionTreeService() {
+    public ExpressionTreeService(RandomInt random) {
         this.root = null;
+        this.random = random;
     }
 
     public Node getRoot() {
@@ -19,28 +18,20 @@ public class ExpressionTreeService {
         return this.root;
     }
 
-    public void setRoot(int depth) {
-        this.root = generateNode(depth, true);
-    }
-
     // This creates the actual tree, the boolean is to force an operator for the
     // root.
     private Node generateNode(int depth, boolean firstInvocation) {
 
-        // if (root == null) {
-        //     setRoot(depth);
-        // }
-
         // Force leafs to be a number between 1 and 9
         if (depth == 0) {
-            return new Node(String.valueOf(rand.nextInt(9) + 1));
+            return new Node(String.valueOf(random.nextInt(9) + 1));
         }
 
         // Choose between creating an operator or operand.
-        if (!firstInvocation && rand.nextBoolean()) {
-            return new Node(String.valueOf(rand.nextInt(9) + 1));
+        if (!firstInvocation && random.nextBoolean()) {
+            return new Node(String.valueOf(random.nextInt(9) + 1));
         } else {
-            String op = operators[rand.nextInt(operators.length)];
+            String op = operators[random.nextInt(operators.length)];
             Node node = new Node(op);
 
             node.left = generateNode(depth - 1, false);
