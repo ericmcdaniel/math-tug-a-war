@@ -14,7 +14,6 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "./../docs",
-            "baseHref": "/math-tug-a-war/",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -76,7 +75,7 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
             "polyfills": [
               "zone.js",
