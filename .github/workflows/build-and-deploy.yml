@@ -13,12 +13,12 @@ jobs:
     - name: Deploy and Build Angular
       uses: AhsanAyaz/angular-deploy-gh-pages-actions@v1.4.0
       with:
-        angular_project_dir: ./frontend-ui
+        angular_project_dir: frontend-ui
         github_access_token: ${{ secrets.GITHUB_TOKEN }} # see the Configuration section for how you can create secrets
         build_configuration: production
         base_href: /math-tug-a-war/   # make sure this corresponds to https://<your_username>.github.io/<base_href>/
         deploy_branch: gh-pages # The branch the action should deploy to.
-        angular_dist_build_folder: ./../docs # The folder where your project is supposed to be after running ng build by the action.
+        angular_dist_build_folder: frontend-ui/dist/math-tug-a-war
 
 permissions:
   contents: write # Allow write permission to GITHUB_TOKEN to commit to deploy branch.
