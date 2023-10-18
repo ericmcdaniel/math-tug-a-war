@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'frontend-ui'`, () => {
+  it(`should have as title 'Math Tug-a-War'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('frontend-ui');
+    expect(app.title).toEqual('Math Tug-a-War');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('frontend-ui app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('Math Tug-a-War app is running!');
   });
 });
