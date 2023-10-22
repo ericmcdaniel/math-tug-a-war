@@ -1,5 +1,7 @@
 package com.csc478softwareengineeringcapstone.services;
 
+import java.util.Arrays;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -9,79 +11,84 @@ public class ExpressionTreeService {
     private RandomInt random;
 
     public ExpressionTreeService(RandomInt random) {
-        this.root = null;
+        this.root = new Node("+");
         this.random = random;
     }
 
     public Node getRoot() {
-
         return this.root;
     }
 
-    // This creates the actual tree, the boolean is to force an operator for the
-    // root.
-    private Node generateNode(int depth, boolean firstInvocation) {
+    private int generateNumber() {
+        return random.nextInt(9) + 1;
+    }
 
-        // Force leafs to be a number between 1 and 9
+    private String generateOperator() {
+        return operators[random.nextInt(operators.length)];
+    }
+
+    private void handleSubtraction(Node node, int depth) {
+        double leftValue = evaluate(node.left);
+        double rightValue = evaluate(node.right);
+
+        while (leftValue < rightValue) {
+            generateNode(node.left, depth - 1);
+            leftValue = evaluate(node.left);
+        }
+    }
+
+    private void handleDivision(Node node, int depth) {
+        double leftValue = evaluate(node.left);
+        double rightValue = evaluate(node.right);
+
+        while (leftValue % rightValue != 0 || rightValue == 0) {
+            generateNode(node.right, depth - 1);
+            rightValue = evaluate(node.right);
+        }
+    }
+
+    private void handleMultiplication(Node node, int depth) {
+        double leftValue = evaluate(node.left);
+        double rightValue = evaluate(node.right);
+
+        while (leftValue > 12 || rightValue > 12) {
+            if (leftValue > 12) {
+                generateNode(node.left, depth - 1);
+                leftValue = evaluate(node.left);
+            }
+            if (rightValue > 12) {
+                generateNode(node.right, depth - 1);
+                rightValue = evaluate(node.right);
+            }
+        }
+    }
+
+    private void generateNode(Node currentNode, int depth) {
+
         if (depth == 0) {
-            return new Node(String.valueOf(random.nextInt(9) + 1));
+            currentNode.value = String.valueOf(generateNumber());
+            return;
         }
 
-        // Choose between creating an operator or operand.
-        if (!firstInvocation && random.nextBoolean()) {
-            return new Node(String.valueOf(random.nextInt(9) + 1));
-        } else {
-            String op = operators[random.nextInt(operators.length)];
-            Node node = new Node(op);
+        if (Arrays.asList(operators).contains(currentNode.value)) {
+            currentNode.left = new Node(random.nextBoolean() ? generateOperator() : String.valueOf(generateNumber()));
+            generateNode(currentNode.left, depth - 1);
 
-            node.left = generateNode(depth - 1, false);
-            node.right = generateNode(depth - 1, false);
+            currentNode.right = new Node(random.nextBoolean() ? generateOperator() : String.valueOf(generateNumber()));
+            generateNode(currentNode.right, depth - 1);
 
-            if ("-".equals(op)) {
-                double leftValue = evaluate(node.left);
-                double rightValue = evaluate(node.right);
-
-                // Force left child of "-" to be greater than or equal to right child
-                while (leftValue < rightValue) {
-                    node.left = generateNode(depth - 1, false);
-                    leftValue = evaluate(node.left);
-                }
-            } else if ("/".equals(op)) {
-                double leftValue = evaluate(node.left);
-                double rightValue = evaluate(node.right);
-
-                /*
-                 * Ensure the right subtree is a divisor of the left subtree
-                 * This can result in a lot of divide by 1 expressions. May look at generating
-                 * new leftValues as well, but have to be careful with leafs.
-                 */
-                while (leftValue % rightValue != 0 || rightValue == 0) {
-                    node.right = generateNode(depth - 1, false);
-                    rightValue = evaluate(node.right);
-                }
-            } else if ("*".equals(op)) {
-                double leftValue = evaluate(node.left);
-                double rightValue = evaluate(node.right);
-
-                // Making sure left and right child of "*" are less than or equal to 12
-                while (leftValue > 12 || rightValue > 12) {
-                    if (leftValue > 12) {
-                        node.left = generateNode(depth - 1, false);
-                        leftValue = evaluate(node.left);
-                    }
-                    if (rightValue > 12) {
-                        node.right = generateNode(depth - 1, false);
-                        rightValue = evaluate(node.right);
-                    }
-                }
+            if ("-".equals(currentNode.value)) {
+                handleSubtraction(currentNode, depth);
+            } else if ("/".equals(currentNode.value)) {
+                handleDivision(currentNode, depth);
+            } else if ("*".equals(currentNode.value)) {
+                handleMultiplication(currentNode, depth);
             }
-
-            return node;
         }
     }
 
     public String generateExpression(int depth) {
-        this.root = generateNode(depth, true);
+        generateNode(this.root, depth);
         return inOrderTraversal(this.root);
     }
 
