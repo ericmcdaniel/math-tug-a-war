@@ -4,7 +4,9 @@ updates:
     directory: "/frontend-ui"
     schedule:
       interval: "weekly"
+    target-branch: "dependabot"
   - package-ecosystem: "maven"
     directory: "/backend-api"
     schedule:
       interval: "weekly"
+    target-branch: "dependabot"
