@@ -1,0 +1,10 @@
+.container {
+  display: inline-block;
+  margin: 1rem;
+}
+
+.wrapper {
+  border: 1px solid black;
+  width: auto;
+  padding: 1rem;
+}

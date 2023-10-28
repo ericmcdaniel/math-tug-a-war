@@ -1,0 +1,10 @@
+<section>
+  <form (ngSubmit)="onSubmit(configuration)" #configuration="ngForm">
+    <label for="difficulty">Choose your difficulty</label>
+    <select name="difficulty" id="difficulty" [(ngModel)]="selectedDifficulty">
+      <option value="--">--</option>
+      <option *ngFor="let diff of difficulty" [value]="diff.toLowerCase()">{{ diff }}</option>
+    </select>
+    <input type="submit" value="Start" [disabled]="selectedDifficulty == '--'">
+  </form>
+</section>

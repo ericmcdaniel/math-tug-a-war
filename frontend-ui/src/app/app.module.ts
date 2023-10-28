@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
-import { AppRoutingModule } from './app-routing.module';
+import { GameModule } from './feature/game/game.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
     CoreModule,
     BrowserModule,
     AppRoutingModule,
+    GameModule
   ],
   providers: [],
   bootstrap: [AppComponent]
