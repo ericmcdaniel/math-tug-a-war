@@ -1,0 +1,12 @@
+<div *ngIf="(remaining$ | async) === 0">
+  <p>You have ten math questions to solve in ten seconds.</p>
+  <p>Press <code>ENTER</code> when you're ready to start the game.</p>
+</div>
+
+<div class="non-playable-game" #playGame>
+  <div>{{ (expression$ | async)?.equation }}</div>
+  <input #solution type="text">
+  <small>Press enter to submit</small>
+  <p>Questions Correct: {{ (mathService.gameResults$.asObservable() | async)?.correct }}</p>
+  <p>Question {{ remaining$ | async }} of 10</p>
+</div>

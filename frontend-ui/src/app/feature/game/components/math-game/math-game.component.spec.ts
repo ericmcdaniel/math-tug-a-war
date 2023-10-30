@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MathGameComponent } from './play.component';
+import { MathGameComponent } from './math-game.component';
 
-describe('GameComponent', () => {
+describe('MathGameComponent', () => {
   let component: MathGameComponent;
   let fixture: ComponentFixture<MathGameComponent>;
 

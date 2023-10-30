@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ErrorPage } from './core/pages/error/error.page';
 import { LandingPage } from './core/pages/landing/landing.page';
 import { NotFoundPage } from './core/pages/not-found/not-found.page';
 import { ConfigurePage } from './feature/game/pages/configure/configure.page';
@@ -17,6 +18,7 @@ const routes: Routes = [
       { path: '**', redirectTo: '' }
     ]
   },
+  { path: 'error', component: ErrorPage },
   { path: '**', pathMatch: 'full', component: NotFoundPage }
 ];
 
