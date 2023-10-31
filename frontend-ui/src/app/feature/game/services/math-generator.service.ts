@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
 import { MessageService } from '../../../core/services/message.service';
 import { ExpressionResponse } from '../models/expression-response.model';
 import { GameResults } from '../models/game-results.model';

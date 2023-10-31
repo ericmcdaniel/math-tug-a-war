@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { environment } from 'src/environments/environment';
-
 @Component({
   selector: 'app-configure',
   templateUrl: './configure.component.html',
@@ -18,7 +16,7 @@ export class ConfigureComponent {
 
 
   onSubmit(form: NgForm) {
-    this.router.navigate(['play'], { relativeTo: this.route })
+    this.router.navigate(['play'], { relativeTo: this.route });
   }
 
 }

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RouterTestingModule } from '@angular/router/testing';
+import { MessageService } from '../../../../core/services/message.service';
 import { ResultsComponent } from './results.component';
 
 describe('ResultsComponent', () => {
@@ -8,7 +9,13 @@ describe('ResultsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ResultsComponent]
+      declarations: [ResultsComponent],
+      imports: [
+        RouterTestingModule.withRoutes([])
+      ],
+      providers: [
+        MessageService,
+      ]
     });
     fixture = TestBed.createComponent(ResultsComponent);
     component = fixture.componentInstance;

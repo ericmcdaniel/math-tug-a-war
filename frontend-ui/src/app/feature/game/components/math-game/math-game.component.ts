@@ -81,7 +81,13 @@ export class MathGameComponent {
       error: (error: unknown) => {
         this.timer$.unsubscribe();
         if (error instanceof HttpErrorResponse) {
-          this._messageService.errorMsg$.next(error.message);
+          if (error.status === 0) {
+            this._messageService.errorMsg$.next(error.message + '. This is most likely because the API server is not running.');
+          } else {
+            this._messageService.errorMsg$.next(`${error.status} ${error.error.error}. ${error.error.message}`);
+          }
+        } else {
+          this._messageService.errorMsg$.next(JSON.stringify(error));
         }
         this.router.navigate(['../../error'], { relativeTo: this.route });
       }
