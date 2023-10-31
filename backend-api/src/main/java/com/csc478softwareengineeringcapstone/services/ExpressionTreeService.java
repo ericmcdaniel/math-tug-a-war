@@ -1,7 +1,5 @@
 package com.csc478softwareengineeringcapstone.services;
 
-import java.util.Arrays;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,7 +49,9 @@ public class ExpressionTreeService {
         /*
          * Divide by 1 is now only allowed on easy difficulty. If we end up with 1/1, 
          * which would force rightValue to be 1 then we also remake left side to try 
-         * and force more interesting equations.
+         * and create more interesting equations. We can still end up with 9 / 9 for 
+         * example, but that's going to be hard to avoid, although I could check.
+         * Perhaps a hard mode only check?
          */
         while (leftValue % rightValue != 0 || rightValue == 0
                 || (!this.IS_DIVISIBLE_BY_ONE && rightValue == 1)) {

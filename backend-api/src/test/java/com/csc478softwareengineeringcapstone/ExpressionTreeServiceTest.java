@@ -1,17 +1,13 @@
 package com.csc478softwareengineeringcapstone;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
 
 import java.time.Duration;
 import java.util.Arrays;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -49,12 +45,14 @@ public class ExpressionTreeServiceTest {
 
   @Test
   void testGeneratedExpressionHasExpectedDepth() {
-    int depth = 3;
+    // Depth set to four because the test calculates the root as depth 1, 
+    // whereas I built the actual function with the root being depth 0.
+    int depth = 4;
     tree.generateExpression("hard");
     Node rootNode = tree.getRoot();
     int actualDepth = calculateDepth(rootNode);
     assertTrue(actualDepth <= depth,
-        "Generated expression should have a depth less than or equal to the specified maximum depth");
+        "Generated expression should have a depth less than or equal to the specified maximum depth: " + actualDepth);
   }
 
   @Test
