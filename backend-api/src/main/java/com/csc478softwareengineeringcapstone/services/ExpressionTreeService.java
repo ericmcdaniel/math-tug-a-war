@@ -7,81 +7,119 @@ public class ExpressionTreeService {
     private Node root;
     private String[] operators = { "+", "-", "*", "/" };
     private RandomInt random;
+    private DifficultyProperties difficulty;
+
+    private int MAX_DEPTH;
+    private int MAX_RANDOM;
+    private int MAX_MULTIPLY;
+    private boolean IS_DIVISIBLE_BY_ONE;
 
     public ExpressionTreeService(RandomInt random) {
-        this.root = null;
         this.random = random;
+        this.root = null;
     }
 
     public Node getRoot() {
-
         return this.root;
     }
 
-    // This creates the actual tree, the boolean is to force an operator for the
-    // root.
-    private Node generateNode(int depth, boolean firstInvocation) {
+    private int generateNumber() {
+        return random.nextInt(this.MAX_RANDOM) + 1;
+    }
+
+    private String generateOperator() {
+        return operators[random.nextInt(operators.length)];
+    }
+
+    private void handleSubtraction(Node node, int depth) {
+        double leftValue = evaluate(node.left);
+        double rightValue = evaluate(node.right);
+
+        // Force left child of "-" to be greater than or equal to right child
+        while (leftValue < rightValue) {
+            node.left = generateSubTree(depth - 1, false);
+            leftValue = evaluate(node.left);
+        }
+    }
+
+    private void handleDivision(Node node, int depth) {
+        double leftValue = evaluate(node.left);
+        double rightValue = evaluate(node.right);
+
+        /*
+         * Divide by 1 is now only allowed on easy difficulty. If we end up with 1/1, 
+         * which would force rightValue to be 1 then we also remake left side to try 
+         * and create more interesting equations. We can still end up with 9 / 9 for 
+         * example, but that's going to be hard to avoid, although I could check.
+         * Perhaps a hard mode only check?
+         */
+        while (leftValue % rightValue != 0 || rightValue == 0
+                || (!this.IS_DIVISIBLE_BY_ONE && rightValue == 1)) {
+
+            if (leftValue == 1 && !this.IS_DIVISIBLE_BY_ONE && rightValue == 1) {
+                node.left = generateSubTree(depth - 1, false);
+                leftValue = evaluate(node.left);
+            }
+            node.right = generateSubTree(depth - 1, false);
+            rightValue = evaluate(node.right);
+        }
+    }
+
+    private void handleMultiplication(Node node, int depth) {
+        double leftValue = evaluate(node.left);
+        double rightValue = evaluate(node.right);
+
+        // Making sure left and right child of "*" are less than or equal to 12
+        while (leftValue > this.MAX_MULTIPLY || rightValue > this.MAX_MULTIPLY) {
+            if (leftValue > this.MAX_MULTIPLY) {
+                node.left = generateSubTree(depth - 1, false);
+                leftValue = evaluate(node.left);
+            }
+            if (rightValue > this.MAX_MULTIPLY) {
+                node.right = generateSubTree(depth - 1, false);
+                rightValue = evaluate(node.right);
+            }
+        }
+    }
+
+    private Node generateSubTree(int depth, boolean firstInvocation) {
 
         // Force leafs to be a number between 1 and 9
         if (depth == 0) {
-            return new Node(String.valueOf(random.nextInt(9) + 1));
+            return new Node(String.valueOf(generateNumber()));
         }
 
         // Choose between creating an operator or operand.
         if (!firstInvocation && random.nextBoolean()) {
-            return new Node(String.valueOf(random.nextInt(9) + 1));
+            return new Node(String.valueOf(generateNumber()));
         } else {
-            String op = operators[random.nextInt(operators.length)];
+            String op = generateOperator();
             Node node = new Node(op);
 
-            node.left = generateNode(depth - 1, false);
-            node.right = generateNode(depth - 1, false);
+            node.left = generateSubTree(depth - 1, false);
+            node.right = generateSubTree(depth - 1, false);
 
             if ("-".equals(op)) {
-                double leftValue = evaluate(node.left);
-                double rightValue = evaluate(node.right);
-
-                // Force left child of "-" to be greater than or equal to right child
-                while (leftValue < rightValue) {
-                    node.left = generateNode(depth - 1, false);
-                    leftValue = evaluate(node.left);
-                }
+                handleSubtraction(node, depth);
             } else if ("/".equals(op)) {
-                double leftValue = evaluate(node.left);
-                double rightValue = evaluate(node.right);
-
-                /*
-                 * Ensure the right subtree is a divisor of the left subtree
-                 * This can result in a lot of divide by 1 expressions. May look at generating
-                 * new leftValues as well, but have to be careful with leafs.
-                 */
-                while (leftValue % rightValue != 0 || rightValue == 0) {
-                    node.right = generateNode(depth - 1, false);
-                    rightValue = evaluate(node.right);
-                }
+                handleDivision(node, depth);
             } else if ("*".equals(op)) {
-                double leftValue = evaluate(node.left);
-                double rightValue = evaluate(node.right);
-
-                // Making sure left and right child of "*" are less than or equal to 12
-                while (leftValue > 12 || rightValue > 12) {
-                    if (leftValue > 12) {
-                        node.left = generateNode(depth - 1, false);
-                        leftValue = evaluate(node.left);
-                    }
-                    if (rightValue > 12) {
-                        node.right = generateNode(depth - 1, false);
-                        rightValue = evaluate(node.right);
-                    }
-                }
+                handleMultiplication(node, depth);
             }
 
             return node;
         }
     }
 
-    public String generateExpression(int depth) {
-        this.root = generateNode(depth, true);
+    public String generateExpression(String difficulty) {
+
+        this.difficulty = DifficultyMap.getProperties(difficulty);
+        this.MAX_DEPTH = this.difficulty.getDepth();
+        this.MAX_RANDOM = this.difficulty.getMaxRandom();
+        this.MAX_MULTIPLY = this.difficulty.getMaxMultiply();
+        this.IS_DIVISIBLE_BY_ONE = this.difficulty.isDivideByOne();
+
+        this.root = generateSubTree(this.MAX_DEPTH, true);
         return inOrderTraversal(this.root);
     }
 
@@ -117,6 +155,10 @@ public class ExpressionTreeService {
 
         // A bit of error checking as we evaluate, just to be sure our generator did
         // what we expected.
+        return errorCheck(node, leftValue, rightValue);
+    }
+
+    private double errorCheck(Node node, double leftValue, double rightValue) {
         switch (node.value) {
             case "+":
                 return leftValue + rightValue;
@@ -126,35 +168,20 @@ public class ExpressionTreeService {
                 }
                 return leftValue - rightValue;
             case "*":
+                if (leftValue > MAX_MULTIPLY || rightValue > MAX_MULTIPLY) {
+                    throw new ArithmeticException("Multiplier operator too large");
+                }
                 return leftValue * rightValue;
             case "/":
                 if (rightValue == 0) {
                     throw new ArithmeticException("Division by zero");
+                }
+                if (!IS_DIVISIBLE_BY_ONE && rightValue == 1) {
+                    throw new ArithmeticException("Division by one");
                 }
                 return leftValue / rightValue;
             default:
                 throw new IllegalArgumentException("Invalid operator: " + node.value);
         }
     }
-
-    class Node {
-        String value;
-        Node left;
-        Node right;
-
-        Node(String value) {
-            this.value = value;
-        }
-    }
-
-    /* public static void main(String[] args) {
-    
-        ExpressionTree tree = new ExpressionTree(3);
-        String expression = tree.generateExpression();
-        double result = tree.evaluate(tree.root);
-    
-        System.out.println("Generated Expression: " + expression);
-        System.out.println("Result: " + result);
-    
-    } */
 }

@@ -23,7 +23,7 @@ public class MathExpressionController {
 
   @GetMapping("/generate-equation")
   public Map<String, Object> generateEquation(
-      @RequestParam(value = "difficulty", defaultValue = "3") int difficulty) {
+      @RequestParam(value = "difficulty", defaultValue = "easy") String difficulty) {
     String equation = treeService.generateExpression(difficulty);
     double result = treeService.evaluate(treeService.getRoot());
 
@@ -39,7 +39,6 @@ public class MathExpressionController {
     Map<String, Object> response = new HashMap<>();
     response.put("equationID", equationID);
     response.put("equation", equation);
-    response.put("http_status", 200);
 
     return response;
   }
@@ -53,18 +52,16 @@ public class MathExpressionController {
     if (equationData == null) {
       Map<String, Object> errorResponse = new HashMap<>();
       errorResponse.put("message", "Invalid equation ID");
-      errorResponse.put("http_status", 400);
       return errorResponse;
     }
 
     double correctResult = (double) equationData.get("result");
     Map<String, Object> response = new HashMap<>();
     if (providedAnswer == correctResult) {
+      equationsMap.remove(equationID);
       response.put("message", "Correct answer");
-      response.put("http_status", 200);
     } else {
       response.put("message", "Incorrect answer");
-      response.put("http_status", 200);
     }
 
     return response;
@@ -85,7 +82,6 @@ public class MathExpressionController {
     Map<String, Object> map = new HashMap<>();
 
     map.put("response", String.format("Hello %s!", name));
-    map.put("http_status", 200);
 
     return map;
   }
