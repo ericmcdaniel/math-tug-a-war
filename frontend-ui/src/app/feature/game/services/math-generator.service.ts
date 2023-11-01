@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
-import { MessageService } from '../../../core/services/message.service';
 import { ExpressionResponse } from '../models/expression-response.model';
 import { GameResults } from '../models/game-results.model';
 import { ValidatedRequest } from '../models/validation-request.model';
@@ -14,11 +13,11 @@ import { ValidatedResponse } from '../models/validation-response.model';
 })
 export class MathGeneratorService {
 
-  public gameResults$ = new BehaviorSubject<GameResults>({ correct: -1, questions: [] });
+  public gameResults$ = new BehaviorSubject<GameResults>({ correct: 0, questions: [] });
 
-  constructor(private _http: HttpClient, private _messageService: MessageService) { }
+  constructor(private _http: HttpClient) { }
 
-  public generateExpression(difficulty: number): Observable<ExpressionResponse> {
+  public generateExpression(difficulty: string): Observable<ExpressionResponse> {
     return this._http.get<ExpressionResponse>(environment.apiUrl + 'generate-equation', { params: { difficulty } });
   }
 
@@ -26,6 +25,10 @@ export class MathGeneratorService {
     return this._http.post<ValidatedResponse>(environment.apiUrl + 'validate-answer', {
       request
     });
+  }
+
+  public initialize() {
+    this.gameResults$ = new BehaviorSubject<GameResults>({ correct: 0, questions: [] });
   }
 
   public updateScore() {

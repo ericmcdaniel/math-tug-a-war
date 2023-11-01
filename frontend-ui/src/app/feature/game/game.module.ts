@@ -20,7 +20,7 @@ import { SinglePlayerPage } from './pages/single-player/single-player.page';
     SinglePlayerPage,
     ConfigurePage,
     PlayPage,
-    ResultsPage
+    ResultsPage,
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subscription, take, takeWhile, timer } from 'rxjs';
 import { MessageService } from '../../../../core/services/message.service';
@@ -11,14 +11,12 @@ import { MathGeneratorService } from '../../services/math-generator.service';
   templateUrl: './math-game.component.html',
   styleUrls: ['./math-game.component.css']
 })
-export class MathGameComponent {
-
+export class MathGameComponent implements AfterViewInit {
 
   public expression$ = new BehaviorSubject<ExpressionResponse | undefined>(undefined);
-  public remaining$ = new BehaviorSubject<number>(0);
+  public questionsCompleted$ = new BehaviorSubject<number>(0);
   public timer$: Subscription;
-  @ViewChild('solution', { static: false }) inputElement: ElementRef<HTMLInputElement>;
-  @ViewChild('playGame', { static: false }) divElement: ElementRef<HTMLDivElement>;
+  @ViewChild('solution', { static: false }) input: ElementRef<HTMLInputElement>;
 
   constructor(
     public mathService: MathGeneratorService,
@@ -29,21 +27,18 @@ export class MathGameComponent {
 
   @HostListener('document:keypress', ['$event'])
   handleEnterKey(event: KeyboardEvent): void {
-    if (this.remaining$.getValue() === 0) {
-      this.divElement.nativeElement.classList.remove('non-playable-game');
-      this.divElement.nativeElement.classList.add('playable-game');
-    }
-    if (this.remaining$.getValue() >= 10) {
+    if (this.questionsCompleted$.getValue() >= 10) {
       this._messageService.results$.next(this.mathService.gameResults$.getValue());
       this.router.navigate(['../results'], { relativeTo: this.route });
     }
-    this.inputElement.nativeElement.focus();
+    this.input.nativeElement.focus();
     if (event.code === 'Space') {
       this.startTimer();
       this.getNewMathExpression(0);
       return;
     }
     if (event.key !== 'Enter') return;
+    if (!this.input.nativeElement.value) return;
 
     this.startTimer();
     this.mathService.updateScore();
@@ -53,16 +48,22 @@ export class MathGameComponent {
   @HostListener('document:click', ['$event'])
   handleClickOnPage(event: PointerEvent): void {
     console.log(event);
-    this.inputElement.nativeElement.focus();
+    this.input.nativeElement.focus();
+  }
+
+  ngAfterViewInit(): void {
+    this.input.nativeElement.focus();
+    this.startTimer();
   }
 
   startTimer(): void {
     if (this.timer$ && !this.timer$.closed) this.timer$.unsubscribe();
-    this.timer$ = timer(0, 4000).pipe(takeWhile(() => this.remaining$.getValue() <= 10)).subscribe(
+    this.timer$ = timer(0, 4000).pipe(takeWhile(() => this.questionsCompleted$.getValue() <= 10)).subscribe(
       (time) => { // placeholder for getting the exact millisecond for progress bar
         // if (time % 25 === 0) {
-        if (this.remaining$.getValue() >= 10) {
+        if (this.questionsCompleted$.getValue() >= 10) {
           this._messageService.results$.next(this.mathService.gameResults$.getValue());
+          this.questionsCompleted$.next(0);
           this.router.navigate(['../results'], { relativeTo: this.route });
         } else {
           this.getNewMathExpression();
@@ -72,11 +73,11 @@ export class MathGameComponent {
   }
 
   getNewMathExpression(addNewScore = 1): void {
-    this.mathService.generateExpression(3).pipe(take(1)).subscribe({
+    this.mathService.generateExpression('medium').pipe(take(1)).subscribe({
       next: (exprResp: ExpressionResponse) => {
-        this.remaining$.next(this.remaining$.getValue() + addNewScore);
+        this.questionsCompleted$.next(this.questionsCompleted$.getValue() + addNewScore);
         this.expression$.next(exprResp);
-        this.inputElement.nativeElement.value = '';
+        this.input.nativeElement.value = '';
       },
       error: (error: unknown) => {
         this.timer$.unsubscribe();

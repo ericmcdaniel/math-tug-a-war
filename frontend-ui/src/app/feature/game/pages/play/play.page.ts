@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import { MathGeneratorService } from '../../services/math-generator.service';
 
 @Component({
   selector: 'app-play-ui',
@@ -7,4 +8,16 @@ import { Component } from '@angular/core';
 })
 export class PlayPage {
 
+  isGettingReady = true;
+
+  constructor(private mathService: MathGeneratorService) {
+    this.mathService.initialize();
+  }
+
+  @HostListener('document:keypress', ['$event'])
+  handleEnterKey(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.isGettingReady = false;
+    }
+  }
 }

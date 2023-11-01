@@ -1,5 +1,11 @@
 <div class="container">
   <div class="wrapper">
-    <app-math-game></app-math-game>
+    <div *ngIf="isGettingReady; else playGame">
+      <p>You have ten math questions to solve in ten seconds.</p>
+      <p>Press <code>ENTER</code> when you're ready to start the game.</p>
+    </div>
+    <ng-template #playGame>
+      <app-math-game></app-math-game>
+    </ng-template>
   </div>
 </div>

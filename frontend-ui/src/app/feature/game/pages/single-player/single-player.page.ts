@@ -2,9 +2,6 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-single-player',
-  templateUrl: './single-player.page.html',
-  styleUrls: ['./single-player.page.css']
+  template: '<router-outlet></router-outlet>'
 })
-export class SinglePlayerPage {
-
-}
+export class SinglePlayerPage { }
