@@ -105,17 +105,4 @@ public class ExpressionTreeServiceTest {
       }
     }
   }
-
-  // I would also highly encourage you to move as much of the HashMap logic from the controller into
-  // a service. It's part of the MVC pattern - controllers direct the traffic while services handle
-  // all of the business logic. You can perhaps make a second "Response" Service class (whatever you
-  // want to name it), which handles and formats the official response, while managing the official
-  // Expression Tree class to construct the tree. This is in line with that the original UML diagram
-  // suggests.
-
-  /*                                   As a diagram:
-   * Expression Controller     →     Expression Generator Service     →     Expression Tree     →     Node
-   * (Routes the request)           (Manages the Expression Tree)            (Computes the         (Elements of
-   *                                                                          expression)         the expression)
-   */
 }
