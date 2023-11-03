@@ -22,9 +22,7 @@ export class MathGeneratorService {
   }
 
   public validateExpression(request: ValidatedRequest): Observable<ValidatedResponse> {
-    return this._http.post<ValidatedResponse>(environment.apiUrl + 'validate-answer', {
-      request
-    });
+    return this._http.post<ValidatedResponse>(environment.apiUrl + 'validate-answer', request);
   }
 
   public initialize() {

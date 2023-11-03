@@ -1,5 +1,4 @@
 export class ExpressionResponse {
-  equationID: string;
+  id: string;
   equation: string;
-  http_status: number
 }

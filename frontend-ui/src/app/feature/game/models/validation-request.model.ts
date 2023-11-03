@@ -1,4 +1,4 @@
 export class ValidatedRequest {
-  equationID: string;
-  answer: number;
+  id: string;
+  answer: string;
 }

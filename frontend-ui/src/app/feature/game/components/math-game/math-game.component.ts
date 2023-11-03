@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subscription, take, takeWhile, timer } from 'rxjs';
 import { MessageService } from '../../../../core/services/message.service';
 import { ExpressionResponse } from '../../models/expression-response.model';
+import { ValidatedRequest } from '../../models/validation-request.model';
+import { ValidatedResponse } from '../../models/validation-response.model';
 import { MathGeneratorService } from '../../services/math-generator.service';
 
 @Component({
@@ -27,7 +29,7 @@ export class MathGameComponent implements AfterViewInit {
 
   @HostListener('document:keypress', ['$event'])
   handleEnterKey(event: KeyboardEvent): void {
-    if (this.questionsCompleted$.getValue() >= 10) {
+    if (this.questionsCompleted$.getValue() > 10) {
       this._messageService.results$.next(this.mathService.gameResults$.getValue());
       this.router.navigate(['../results'], { relativeTo: this.route });
     }
@@ -41,8 +43,7 @@ export class MathGameComponent implements AfterViewInit {
     if (!this.input.nativeElement.value) return;
 
     this.startTimer();
-    this.mathService.updateScore();
-    // this.mathService.validateExpression();
+    this.validateExpression();
   }
 
   @HostListener('document:click', ['$event'])
@@ -58,7 +59,7 @@ export class MathGameComponent implements AfterViewInit {
 
   startTimer(): void {
     if (this.timer$ && !this.timer$.closed) this.timer$.unsubscribe();
-    this.timer$ = timer(0, 4000).pipe(takeWhile(() => this.questionsCompleted$.getValue() <= 10)).subscribe(
+    this.timer$ = timer(0, 10000).pipe(takeWhile(() => this.questionsCompleted$.getValue() <= 10)).subscribe(
       (time) => { // placeholder for getting the exact millisecond for progress bar
         // if (time % 25 === 0) {
         if (this.questionsCompleted$.getValue() >= 10) {
@@ -73,11 +74,36 @@ export class MathGameComponent implements AfterViewInit {
   }
 
   getNewMathExpression(addNewScore = 1): void {
-    this.mathService.generateExpression('medium').pipe(take(1)).subscribe({
+    this.mathService.generateExpression('easy').pipe(take(1)).subscribe({
       next: (exprResp: ExpressionResponse) => {
         this.questionsCompleted$.next(this.questionsCompleted$.getValue() + addNewScore);
         this.expression$.next(exprResp);
         this.input.nativeElement.value = '';
+      },
+      error: (error: unknown) => {
+        this.timer$.unsubscribe();
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 0) {
+            this._messageService.errorMsg$.next(error.message + '. This is most likely because the API server is not running.');
+          } else {
+            this._messageService.errorMsg$.next(`${error.status} ${error.error.error}. ${error.error.message}`);
+          }
+        } else {
+          this._messageService.errorMsg$.next(JSON.stringify(error));
+        }
+        this.router.navigate(['../../error'], { relativeTo: this.route });
+      }
+    });
+  }
+
+  validateExpression(): void {
+    const userRequestToValidate: ValidatedRequest = { id: this.expression$.getValue()?.id || '', answer: this.input.nativeElement.value };
+    console.log(userRequestToValidate);
+    this.mathService.validateExpression(userRequestToValidate).pipe(take(1)).subscribe({
+      next: (validationResp: ValidatedResponse) => {
+        if (validationResp.message === 'Correct answer') {
+          this.mathService.updateScore();
+        }
       },
       error: (error: unknown) => {
         this.timer$.unsubscribe();

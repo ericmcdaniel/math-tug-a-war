@@ -95,7 +95,7 @@ public class ExpressionTreeServiceTest {
       return isValidExpression(node.getLeft()) && isValidExpression(node.getRight());
     } else {
       try {
-        int num = Integer.parseInt(node.getValue());
+        Integer.parseInt(node.getValue());
         if (node.getLeft() != null || node.getRight() != null) {
           return false;
         }

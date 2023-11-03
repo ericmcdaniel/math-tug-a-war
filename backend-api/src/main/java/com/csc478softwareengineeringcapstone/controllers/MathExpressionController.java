@@ -1,5 +1,6 @@
 package com.csc478softwareengineeringcapstone.controllers;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -67,5 +68,15 @@ public class MathExpressionController {
     }
     response.put("message", "Incorrect answer");
     return ResponseEntity.ok(response);
+  }
+
+  /**
+   * User "auth" was explored momentarily as a way to interact with the server before initiating
+   * with the start of the game, however progress was stashed as that is out of scope for V1.
+   * A simple health test to nudge the cloud server awake will suffice for now.
+   */
+  @GetMapping("/health-test")
+  public ResponseEntity<Map.Entry<String, String>> wakeupServer() {
+    return ResponseEntity.ok(new AbstractMap.SimpleEntry<String, String>("status", "OK"));
   }
 }
