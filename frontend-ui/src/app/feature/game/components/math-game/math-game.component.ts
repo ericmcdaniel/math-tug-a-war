@@ -28,20 +28,24 @@ export class MathGameComponent implements AfterViewInit {
   ) { }
 
   @HostListener('document:keypress', ['$event'])
-  handleEnterKey(event: KeyboardEvent): void {
-    if (this.questionsCompleted$.getValue() > 10) {
-      this._messageService.results$.next(this.mathService.gameResults$.getValue());
-      this.router.navigate(['../results'], { relativeTo: this.route });
+  handleUserInput(event: KeyboardEvent): void {
+    const enteredInput = this.input.nativeElement.value;
+    if (this.questionsCompleted$.getValue() >= 10) {
+      if (event.code === 'Space') {
+        this.displayResults();
+      } else if (event.key === 'Enter' && !!enteredInput) {
+        this.validateExpression(() => this.displayResults());
+        this.displayResults();
+      }
+      return;
     }
     this.input.nativeElement.focus();
     if (event.code === 'Space') {
       this.startTimer();
-      this.getNewMathExpression(0);
       return;
     }
     if (event.key !== 'Enter') return;
-    if (!this.input.nativeElement.value) return;
-
+    if (!enteredInput) return;
     this.startTimer();
     this.validateExpression();
   }
@@ -63,14 +67,23 @@ export class MathGameComponent implements AfterViewInit {
       (time) => { // placeholder for getting the exact millisecond for progress bar
         // if (time % 25 === 0) {
         if (this.questionsCompleted$.getValue() >= 10) {
-          this._messageService.results$.next(this.mathService.gameResults$.getValue());
+          if (this.input.nativeElement.value !== '') {
+            this.validateExpression();
+          }
           this.questionsCompleted$.next(0);
-          this.router.navigate(['../results'], { relativeTo: this.route });
+          this.timer$.unsubscribe();
+          this.displayResults();
+          return;
         } else {
           this.getNewMathExpression();
         }
         // }
       });
+  }
+
+  displayResults(): void {
+    this._messageService.results$.next(this.mathService.gameResults$.getValue());
+    this.router.navigate(['../results'], { relativeTo: this.route });
   }
 
   getNewMathExpression(addNewScore = 1): void {
@@ -96,14 +109,14 @@ export class MathGameComponent implements AfterViewInit {
     });
   }
 
-  validateExpression(): void {
+  validateExpression(callback?: () => void): void {
     const userRequestToValidate: ValidatedRequest = { id: this.expression$.getValue()?.id || '', answer: this.input.nativeElement.value };
-    console.log(userRequestToValidate);
     this.mathService.validateExpression(userRequestToValidate).pipe(take(1)).subscribe({
       next: (validationResp: ValidatedResponse) => {
         if (validationResp.message === 'Correct answer') {
           this.mathService.updateScore();
         }
+        if (callback) callback();
       },
       error: (error: unknown) => {
         this.timer$.unsubscribe();
