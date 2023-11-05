@@ -5,6 +5,7 @@
       <option value="--">--</option>
       <option *ngFor="let diff of difficulty" [value]="diff.toLowerCase()">{{ diff }}</option>
     </select>
-    <input type="submit" value="Start" [disabled]="selectedDifficulty == '--'">
+    <input type="submit" value="Start" [disabled]="selectedDifficulty == '--' && (user.getUser() | async)">
   </form>
+  <p *ngIf="!(user.getUser() | async)">The server is still loading, which can take up to 45 seconds. Please wait.</p>
 </section>
