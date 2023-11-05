@@ -31,11 +31,11 @@ export class MathGameComponent implements AfterViewInit {
   handleUserInput(event: KeyboardEvent): void {
     const enteredInput = this.input.nativeElement.value;
     if (this.questionsCompleted$.getValue() >= 10) {
+      this.timer$.unsubscribe();
       if (event.code === 'Space') {
         this.displayResults();
       } else if (event.key === 'Enter' && !!enteredInput) {
         this.validateExpression(() => this.displayResults());
-        this.displayResults();
       }
       return;
     }
@@ -52,7 +52,6 @@ export class MathGameComponent implements AfterViewInit {
 
   @HostListener('document:click', ['$event'])
   handleClickOnPage(event: PointerEvent): void {
-    console.log(event);
     this.input.nativeElement.focus();
   }
 
