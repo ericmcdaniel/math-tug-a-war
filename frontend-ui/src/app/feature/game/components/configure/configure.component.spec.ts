@@ -1,3 +1,5 @@
+import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -12,8 +14,12 @@ describe('ConfigureComponent', () => {
       declarations: [ConfigureComponent],
       imports: [
         RouterTestingModule.withRoutes([]),
-        FormsModule
+        FormsModule,
+        HttpClientTestingModule
       ],
+      providers: [
+        HttpClient
+      ]
     });
     fixture = TestBed.createComponent(ConfigureComponent);
     component = fixture.componentInstance;
