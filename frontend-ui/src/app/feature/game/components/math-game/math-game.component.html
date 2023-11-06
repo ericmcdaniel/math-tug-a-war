@@ -1,8 +1,8 @@
-<div class="playable-game">
+<form class="playable-game">
   <div class="new-problem">{{ (expression$ | async)?.equation }}</div>
-  <input #solution type="text">
+  <input #solution [formControl]="userInput" type="text">
   <small>Press <code>enter</code> to submit</small>
   <small>Press <code>space</code> to skip</small>
   <p>Questions Correct: {{ (mathService.gameResults() | async)?.correct }}</p>
   <p>Question {{ questionsCompleted$ | async }} of 10</p>
-</div>
+</form>

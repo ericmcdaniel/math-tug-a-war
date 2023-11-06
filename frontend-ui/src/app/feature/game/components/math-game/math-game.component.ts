@@ -3,6 +3,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subscription, take, takeWhile, timer } from 'rxjs';
 import { MessageService } from '../../../../core/services/message.service';
+import { NumbersOnlyFormControl } from '../../directives/numbers-only.directive';
 import { ExpressionResponse } from '../../models/expression-response.model';
 import { ValidatedRequest } from '../../models/validation-request.model';
 import { ValidatedResponse } from '../../models/validation-response.model';
@@ -16,6 +17,7 @@ import { MathLogicService } from '../../services/math-logic.service';
 export class MathGameComponent implements AfterViewInit {
 
   @ViewChild('solution', { static: false }) input: ElementRef<HTMLInputElement>;
+  public userInput = new NumbersOnlyFormControl('');
   public expression$ = new BehaviorSubject<ExpressionResponse | undefined>(undefined);
   public questionsCompleted$ = new BehaviorSubject<number>(0);
   public timer$: Subscription;
