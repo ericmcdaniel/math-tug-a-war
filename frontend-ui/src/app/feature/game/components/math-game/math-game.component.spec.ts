@@ -4,13 +4,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import { MessageService } from '../../../../core/services/message.service';
 import { GameResults } from '../../models/game-results.model';
-import { MathGeneratorService } from '../../services/math-generator.service';
+import { MathLogicService } from '../../services/math-logic.service';
 import { MathGameComponent } from './math-game.component';
 
 describe('MathGameComponent', () => {
   let component: MathGameComponent;
   let fixture: ComponentFixture<MathGameComponent>;
-  let mockService: Partial<MathGeneratorService>;
+  let mockService: Partial<MathLogicService>;
   const MOCK_MATH_RESPONSE = { equation: "1 + 2", id: "1234" };
   const MOCK_MATH_VALIDATION = { message: "Correct answer" };
 
@@ -29,7 +29,7 @@ describe('MathGameComponent', () => {
         HttpClientTestingModule
       ],
       providers: [
-        { provide: MathGeneratorService, useValue: mockService },
+        { provide: MathLogicService, useValue: mockService },
         MessageService
       ]
     }).compileComponents();

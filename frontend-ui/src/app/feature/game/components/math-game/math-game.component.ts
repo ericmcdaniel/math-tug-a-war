@@ -6,7 +6,7 @@ import { MessageService } from '../../../../core/services/message.service';
 import { ExpressionResponse } from '../../models/expression-response.model';
 import { ValidatedRequest } from '../../models/validation-request.model';
 import { ValidatedResponse } from '../../models/validation-response.model';
-import { MathGeneratorService } from '../../services/math-generator.service';
+import { MathLogicService } from '../../services/math-logic.service';
 
 @Component({
   selector: 'app-math-game',
@@ -21,7 +21,7 @@ export class MathGameComponent implements AfterViewInit {
   public timer$: Subscription;
 
   constructor(
-    public mathService: MathGeneratorService,
+    public mathService: MathLogicService,
     private _messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute
@@ -65,7 +65,7 @@ export class MathGameComponent implements AfterViewInit {
 
   startTimer(): void {
     if (this.timer$ && !this.timer$.closed) this.timer$.unsubscribe();
-    this.timer$ = timer(0, 100000).pipe(takeWhile(() => this.questionsCompleted$.getValue() <= 10)).subscribe(
+    this.timer$ = timer(0, 10000).pipe(takeWhile(() => this.questionsCompleted$.getValue() <= 10)).subscribe(
       (time) => { // placeholder for getting the exact millisecond for progress bar
         // if (time % 25 === 0) {
         if (this.questionsCompleted$.getValue() >= 10) {
@@ -104,7 +104,7 @@ export class MathGameComponent implements AfterViewInit {
   }
 
   getNewMathExpression(addNewScore = 1): void {
-    this.mathService.generateExpression('easy').pipe(take(1)).subscribe({
+    this.mathService.generateExpression().pipe(take(1)).subscribe({
       next: (exprResp: ExpressionResponse) => {
         this.questionsCompleted$.next(this.questionsCompleted$.getValue() + addNewScore);
         this.expression$.next(exprResp);

@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { MathGeneratorService } from '../../services/math-generator.service';
+import { MathLogicService } from '../../services/math-logic.service';
 
 @Component({
   selector: 'app-play-ui',
@@ -10,7 +10,7 @@ export class PlayPage {
 
   isGettingReady = true;
 
-  constructor(private mathService: MathGeneratorService) {
+  constructor(private mathService: MathLogicService) {
     this.mathService.initialize();
   }
 

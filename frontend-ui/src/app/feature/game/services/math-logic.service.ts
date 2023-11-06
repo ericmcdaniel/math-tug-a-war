@@ -8,23 +8,27 @@ import { GameResults } from '../models/game-results.model';
 import { ValidatedRequest } from '../models/validation-request.model';
 import { ValidatedResponse } from '../models/validation-response.model';
 
+export type Difficulty = 'easy' | 'medium' | 'hard';
+
 @Injectable({
   providedIn: 'root'
 })
-export class MathGeneratorService {
+export class MathLogicService {
 
   private gameResults$: BehaviorSubject<GameResults>;
+  private difficulty$: BehaviorSubject<Difficulty>;
 
   constructor(private _http: HttpClient) {
     this.gameResults$ = new BehaviorSubject<GameResults>({ correct: 0, questions: [] });
+    this.difficulty$ = new BehaviorSubject<Difficulty>('easy');
   }
 
   public gameResults(): Observable<GameResults> {
     return this.gameResults$.asObservable();
   }
 
-  public generateExpression(difficulty: string): Observable<ExpressionResponse> {
-    return this._http.get<ExpressionResponse>(environment.apiUrl + 'generate-equation', { params: { difficulty } });
+  public generateExpression(): Observable<ExpressionResponse> {
+    return this._http.get<ExpressionResponse>(environment.apiUrl + 'generate-equation', { params: { difficulty: this.difficulty$.getValue() } });
   }
 
   public validateExpression(request: ValidatedRequest): Observable<ValidatedResponse> {
@@ -39,4 +43,13 @@ export class MathGeneratorService {
     const currentScore = this.gameResults$.getValue()?.correct || 0;
     this.gameResults$.next({ ...this.gameResults$.getValue(), correct: currentScore + 1 });
   }
+
+  public getDifficulty(): Difficulty {
+    return this.difficulty$.getValue();
+  }
+
+  public setDifficulty(difficulty: Difficulty): void {
+    this.difficulty$.next(difficulty);
+  }
+
 }

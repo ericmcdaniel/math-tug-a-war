@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom, of } from 'rxjs';
-import { MathGeneratorService } from './math-generator.service';
+import { MathLogicService } from './math-logic.service';
 
-describe('MathGeneratorService', () => {
-  let service: MathGeneratorService;
+describe('MathLogicService', () => {
+  let service: MathLogicService;
   let httpMock: any;
   const MOCK_MATH_RESPONSE = { equation: "1 + 2", id: "1234" };
   const MOCK_MATH_VALIDATION = { message: "Correct answer" };
@@ -23,7 +23,7 @@ describe('MathGeneratorService', () => {
         { provide: HttpClient, useValue: httpMock }
       ]
     });
-    service = TestBed.inject(MathGeneratorService);
+    service = TestBed.inject(MathLogicService);
   });
 
   it('should be created', () => {
@@ -32,7 +32,7 @@ describe('MathGeneratorService', () => {
 
   it('should generate a new expression', async () => {
     const spy = jest.spyOn(httpMock, 'get');
-    const result = service.generateExpression('easy');
+    const result = service.generateExpression();
     await expect(firstValueFrom(result)).resolves.toBeDefined();
     await expect(firstValueFrom(result)).resolves.toEqual(MOCK_MATH_RESPONSE);
     expect(spy).toBeCalledTimes(1);
