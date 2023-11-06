@@ -6,8 +6,8 @@
     "start": "ng serve -o",
     "build": "ng build --base-href=/math-tug-a-war/",
     "watch": "ng build --base-href=/math-tug-a-war/ --watch --configuration development",
-    "test": "jest --noStackTrace",
-    "test:dev": "jest --watch --noStackTrace"
+    "test": "jest --noStackTrace --verbose",
+    "test:watch": "jest --watch --noStackTrace --verbose"
   },
   "private": true,
   "dependencies": {

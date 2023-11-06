@@ -15,10 +15,10 @@ import { MathGeneratorService } from '../../services/math-generator.service';
 })
 export class MathGameComponent implements AfterViewInit {
 
+  @ViewChild('solution', { static: false }) input: ElementRef<HTMLInputElement>;
   public expression$ = new BehaviorSubject<ExpressionResponse | undefined>(undefined);
   public questionsCompleted$ = new BehaviorSubject<number>(0);
   public timer$: Subscription;
-  @ViewChild('solution', { static: false }) input: ElementRef<HTMLInputElement>;
 
   constructor(
     public mathService: MathGeneratorService,
@@ -50,8 +50,11 @@ export class MathGameComponent implements AfterViewInit {
     this.validateExpression();
   }
 
+  /*
+   * if the user clicks away from the input textbox, automatically refocus on to the element
+   */
   @HostListener('document:click', ['$event'])
-  handleClickOnPage(event: PointerEvent): void {
+  handleClickOnPage(): void {
     this.input.nativeElement.focus();
   }
 
@@ -62,7 +65,7 @@ export class MathGameComponent implements AfterViewInit {
 
   startTimer(): void {
     if (this.timer$ && !this.timer$.closed) this.timer$.unsubscribe();
-    this.timer$ = timer(0, 10000).pipe(takeWhile(() => this.questionsCompleted$.getValue() <= 10)).subscribe(
+    this.timer$ = timer(0, 100000).pipe(takeWhile(() => this.questionsCompleted$.getValue() <= 10)).subscribe(
       (time) => { // placeholder for getting the exact millisecond for progress bar
         // if (time % 25 === 0) {
         if (this.questionsCompleted$.getValue() >= 10) {
@@ -81,8 +84,23 @@ export class MathGameComponent implements AfterViewInit {
   }
 
   displayResults(): void {
-    this._messageService.results$.next(this.mathService.gameResults$.getValue());
+    const subscription = this.mathService.gameResults().subscribe(value => this._messageService.results$.next(value));
     this.router.navigate(['../results'], { relativeTo: this.route });
+    subscription.unsubscribe();
+  }
+
+  handleError(error: unknown) {
+    this.timer$.unsubscribe();
+    if (error instanceof HttpErrorResponse) {
+      if (error.status === 0) {
+        this._messageService.errorMsg$.next(error.message + '. This is most likely because the API server is not running.');
+      } else {
+        this._messageService.errorMsg$.next(`${error.status} ${error.error.error}. ${error.error.message}`);
+      }
+    } else {
+      this._messageService.errorMsg$.next(JSON.stringify(error));
+    }
+    this.router.navigate(['../../error'], { relativeTo: this.route });
   }
 
   getNewMathExpression(addNewScore = 1): void {
@@ -93,42 +111,26 @@ export class MathGameComponent implements AfterViewInit {
         this.input.nativeElement.value = '';
       },
       error: (error: unknown) => {
-        this.timer$.unsubscribe();
-        if (error instanceof HttpErrorResponse) {
-          if (error.status === 0) {
-            this._messageService.errorMsg$.next(error.message + '. This is most likely because the API server is not running.');
-          } else {
-            this._messageService.errorMsg$.next(`${error.status} ${error.error.error}. ${error.error.message}`);
-          }
-        } else {
-          this._messageService.errorMsg$.next(JSON.stringify(error));
-        }
-        this.router.navigate(['../../error'], { relativeTo: this.route });
+        this.handleError(error);
       }
     });
   }
 
-  validateExpression(callback?: () => void): void {
+  validateExpression(callbackFn?: () => void): void {
     const userRequestToValidate: ValidatedRequest = { id: this.expression$.getValue()?.id || '', answer: this.input.nativeElement.value };
     this.mathService.validateExpression(userRequestToValidate).pipe(take(1)).subscribe({
       next: (validationResp: ValidatedResponse) => {
         if (validationResp.message === 'Correct answer') {
           this.mathService.updateScore();
         }
-        if (callback) callback();
+        /* the callback is added here because of the quirky asynchronous nature of JS. The final question would
+        get successfully validated but the callee (event host listener) wouldn't see the result in time before
+        moving on, resetting the timer 0, generating am 11th question, compounding issues. This solution might
+        not be the prettiest, but is much better than using setTimeouts. */
+        if (callbackFn) callbackFn();
       },
       error: (error: unknown) => {
-        this.timer$.unsubscribe();
-        if (error instanceof HttpErrorResponse) {
-          if (error.status === 0) {
-            this._messageService.errorMsg$.next(error.message + '. This is most likely because the API server is not running.');
-          } else {
-            this._messageService.errorMsg$.next(`${error.status} ${error.error.error}. ${error.error.message}`);
-          }
-        } else {
-          this._messageService.errorMsg$.next(JSON.stringify(error));
-        }
-        this.router.navigate(['../../error'], { relativeTo: this.route });
+        this.handleError(error);
       }
     });
   }

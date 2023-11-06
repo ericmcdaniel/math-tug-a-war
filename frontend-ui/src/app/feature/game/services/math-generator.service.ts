@@ -13,9 +13,15 @@ import { ValidatedResponse } from '../models/validation-response.model';
 })
 export class MathGeneratorService {
 
-  public gameResults$ = new BehaviorSubject<GameResults>({ correct: 0, questions: [] });
+  private gameResults$: BehaviorSubject<GameResults>;
 
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient) {
+    this.gameResults$ = new BehaviorSubject<GameResults>({ correct: 0, questions: [] });
+  }
+
+  public gameResults(): Observable<GameResults> {
+    return this.gameResults$.asObservable();
+  }
 
   public generateExpression(difficulty: string): Observable<ExpressionResponse> {
     return this._http.get<ExpressionResponse>(environment.apiUrl + 'generate-equation', { params: { difficulty } });
@@ -25,11 +31,11 @@ export class MathGeneratorService {
     return this._http.post<ValidatedResponse>(environment.apiUrl + 'validate-answer', request);
   }
 
-  public initialize() {
+  public initialize(): void {
     this.gameResults$ = new BehaviorSubject<GameResults>({ correct: 0, questions: [] });
   }
 
-  public updateScore() {
+  public updateScore(): void {
     const currentScore = this.gameResults$.getValue()?.correct || 0;
     this.gameResults$.next({ ...this.gameResults$.getValue(), correct: currentScore + 1 });
   }

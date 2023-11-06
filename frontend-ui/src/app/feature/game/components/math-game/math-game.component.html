@@ -3,6 +3,6 @@
   <input #solution type="text">
   <small>Press <code>enter</code> to submit</small>
   <small>Press <code>space</code> to skip</small>
-  <p>Questions Correct: {{ (mathService.gameResults$.asObservable() | async)?.correct }}</p>
+  <p>Questions Correct: {{ (mathService.gameResults() | async)?.correct }}</p>
   <p>Question {{ questionsCompleted$ | async }} of 10</p>
 </div>
