@@ -16,7 +16,9 @@ import { MathLogicService } from '../../services/math-logic.service';
 })
 export class MathGameComponent implements AfterViewInit {
 
+  // hold a reference to the input only to force focus if user clicks away
   @ViewChild('solution', { static: false }) input: ElementRef<HTMLInputElement>;
+
   public userInput = new NumbersOnlyFormControl('');
   public expression$ = new BehaviorSubject<ExpressionResponse | undefined>(undefined);
   public questionsCompleted$ = new BehaviorSubject<number>(0);

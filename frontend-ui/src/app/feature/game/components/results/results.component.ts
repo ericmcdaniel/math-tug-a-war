@@ -4,7 +4,20 @@ import { MessageService } from '../../../../core/services/message.service';
 
 @Component({
   selector: 'app-results',
-  template: '<p>You got {{ msgService.results$.getValue()?.correct }} correct!</p>',
+  template: `
+  <div class="results-container">
+    <p>You got {{ msgService.results$.getValue()?.correct }} correct!</p>
+    <ol>
+      <li *ngFor="let question of msgService.results$.getValue()?.questions">{{ question }}</li>
+    </ol>
+    <small>Future work: rendering which questions were correct/incorrect.</small>
+  </div>
+  `,
+  styles: [
+    `.results-container {
+      margin-bottom: 1rem;
+    }`
+  ]
 })
 export class ResultsComponent implements OnInit {
 
