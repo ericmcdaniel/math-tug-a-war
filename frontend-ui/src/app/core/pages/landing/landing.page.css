@@ -1,7 +1,43 @@
 .cta {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  margin-left: 10%;
   height: 100vh;
+  width: 700px;
+
 }
+
+.cta main img {
+  object-fit: contain;
+  width: 100%;
+  margin: auto;
+}
+
+.cta section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.cta section p {
+  margin-top: -5px;
+  font-size: 1.1rem;
+}
+
+.cta section button {
+  font-size: 1rem;
+}
+
+.decorative-blob {
+  position: fixed;
+  /* right: -750px; */
+  left: clamp(35%, 37%, 40%);
+  top: -1200px;
+  width: 2300px;
+  z-index: -1;
+}
+
+@media only screen and (max-width: 750px) {}
