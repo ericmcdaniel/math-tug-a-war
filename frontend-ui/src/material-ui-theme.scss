@@ -1,0 +1,107 @@
+@use '@angular/material' as mat;
+@include mat.core();
+
+$primary: (
+  50 : #e0eeed,
+  100 : #b3d5d3,
+  200 : #80b9b5,
+  300 : #4d9d97,
+  400 : #268881,
+  500 : #00736b,
+  600 : #006b63,
+  700 : #006058,
+  800 : #00564e,
+  900 : #00433c,
+  A100 : #78ffec,
+  A200 : #45ffe5,
+  A400 : #12ffde,
+  A700 : #00f7d5,
+  contrast: (50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$secondary: (
+  50 : #edf0f0,
+  100 : #d2d9d9,
+  200 : #b4c0c0,
+  300 : #96a7a6,
+  400 : #809493,
+  500 : #698180,
+  600 : #617978,
+  700 : #566e6d,
+  800 : #4c6463,
+  900 : #3b5150,
+  A100 : #a8fffb,
+  A200 : #75fff9,
+  A400 : #42fff6,
+  A700 : #29fff5,
+  contrast: (50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$warning: (
+  50 : #f7e7e7,
+  100 : #ebc4c4,
+  200 : #de9c9c,
+  300 : #d07474,
+  400 : #c65757,
+  500 : #bc3939,
+  600 : #b63333,
+  700 : #ad2c2c,
+  800 : #a52424,
+  900 : #971717,
+  A100 : #ffcccc,
+  A200 : #ff9999,
+  A400 : #ff6666,
+  A700 : #ff4c4c,
+  contrast: (50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$frontend-ui-primary: mat.define-palette($primary);
+$frontend-ui-accent: mat.define-palette($secondary);
+$frontend-ui-warn: mat.define-palette($warning);
+$frontend-ui-theme: mat.define-light-theme((color: (primary: $frontend-ui-primary,
+        accent: $frontend-ui-accent,
+        warn: $frontend-ui-warn,
+      )));
+@include mat.all-component-themes($frontend-ui-theme);
