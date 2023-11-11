@@ -1,11 +1,25 @@
 <img src="assets/landing-page-blob.svg" class="decorative-blob">
 
-<div class="cta">
-  <main>
-    <img src="assets/gamelogo-dark-transparent.png" alt="Math Tug a War Logo">
-  </main>
-  <section>
-    <p>A quick-action mental-math game for students and hobbyists</p>
-    <button mat-raised-button color="primary" routerLink="single-player">Play a single-player game</button>
-  </section>
+<div class="container">
+  <div class="cta">
+    <main>
+      <img src="assets/gamelogo-dark-transparent.png" alt="Math Tug a War Logo">
+    </main>
+    <section>
+      <p>A quick-action mental-math game for students and hobbyists</p>
+      <button mat-raised-button color="primary" routerLink="single-player">Play a single-player game</button>
+    </section>
+  </div>
+
+  <div class="decorative-math-container">
+    <div class="decorative-math">
+      <span [@ctaDisplayProblem]="shouldShowLeft ? 'show' : 'hide'" class="operand-1">{{displayOpLeft | async}}</span>
+      <span class="operator">+</span>
+      <span [@ctaDisplayProblem]="shouldShowRight ? 'show' : 'hide'" class="operand-2">{{displayOpRight | async}}</span>
+      <div class="static-equation">
+        <span class="equals">=</span>
+        <div class="blinking-cursor"></div>
+      </div>
+    </div>
+  </div>
 </div>

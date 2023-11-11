@@ -1,43 +1,144 @@
-.cta {
+.container {
+  display: flex;
+  height: 100vh;
+  flex-direction: row;
+}
+
+.container .cta {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin-left: 10%;
-  height: 100vh;
-  width: 700px;
-
+  width: 800px;
+  margin-left: 5%;
 }
 
-.cta main img {
+.container .cta main img {
   object-fit: contain;
   width: 100%;
   margin: auto;
 }
 
-.cta section {
+.container .cta section {
   display: flex;
   flex-direction: column;
   width: 100%;
   align-items: center;
 }
 
-.cta section p {
+.container .cta section p {
   margin-top: -5px;
   font-size: 1.1rem;
 }
 
-.cta section button {
+.container .cta section button {
   font-size: 1rem;
+}
+
+.container .decorative-math-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 600px;
+  width: 50%;
+}
+
+.container .decorative-math {
+  display: flex;
+  transform: rotate(-5deg);
+  overflow: clip;
+}
+
+.container .static-equation {
+  display: flex;
+}
+
+.container .static-equation .blinking-cursor {
+  height: 112px;
+  width: 5px;
+  margin: auto;
+  margin-top: 50px;
+  margin-left: 25px;
+  background-color: var(--text-color);
+  border-radius: 2px;
+  transform: skew(-2deg);
+  animation: cursor-animation 600ms cubic-bezier(0.87, 0, 0.13, 1) infinite alternate;
+}
+
+@keyframes cursor-animation {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.container .operator,
+.container .operand-1,
+.container .operand-2,
+.container .equals {
+  font-size: 7rem;
+  font-family: 'Over the Rainbow', cursive;
+  text-shadow: 2px 5px 6px #33333377;
+  min-width: 100px;
+  font-stretch: 200%;
 }
 
 .decorative-blob {
   position: fixed;
-  /* right: -750px; */
   left: clamp(35%, 37%, 40%);
   top: -1200px;
   width: 2300px;
   z-index: -1;
 }
 
-@media only screen and (max-width: 750px) {}
+@media only screen and (max-width: 1150px) {
+  .decorative-blob {
+    left: -600px;
+    top: 35%;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+
+  .container .cta {
+    width: auto;
+    margin: 0;
+    padding: 3%;
+    height: 40%;
+  }
+
+  .container .cta section p {
+    margin-top: 0px;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .container .decorative-math-container {
+    width: auto;
+    align-items: start;
+    min-width: 0;
+  }
+
+  .container .decorative-math {
+    margin-top: 0;
+  }
+
+  .container .operator,
+  .container .operand-1,
+  .container .operand-2,
+  .container .equals {
+    font-size: 3rem;
+    min-width: 50px;
+  }
+
+  .container .static-equation .blinking-cursor {
+    height: 60px;
+    margin: auto;
+    margin-top: 20px;
+    margin-left: 25px;
+  }
+}

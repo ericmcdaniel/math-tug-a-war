@@ -1,7 +1,16 @@
+:root {
+  --text-color: #d1d0c5;
+}
+
+* {
+  font-family: 'Raleway', sans-serif;
+  font-size: 16px;
+}
+
 body {
   margin: 0;
   height: 100%;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-weight: 300;
   background-color: #2a2a2e;
   color: var(--text-color);
 }
@@ -9,8 +18,4 @@ body {
 html,
 body {
   height: 100%;
-}
-
-:root {
-  --text-color: #d1d0c5;
 }
