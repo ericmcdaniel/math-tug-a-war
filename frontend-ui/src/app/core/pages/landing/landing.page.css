@@ -1,7 +1,7 @@
 .container {
   display: flex;
   height: 100vh;
-  margin-left: 10%;
+  margin-left: 5%;
 }
 
 .container .cta {
@@ -9,7 +9,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  width: 700px;
+  width: 800px;
 }
 
 .container .cta main img {
@@ -34,12 +34,20 @@
   font-size: 1rem;
 }
 
-.container .decorative-math {
+.container .decorative-math-container {
   display: flex;
-  min-width: 600px;
-  width: 55%;
   justify-content: center;
   align-items: center;
+  min-width: 600px;
+  width: 50%;
+}
+
+.container .decorative-math {
+  height: 500px;
+  margin-top: 300px;
+  display: flex;
+  transform: rotate(-5deg);
+  overflow: clip;
 }
 
 .container .static-equation {
@@ -50,41 +58,33 @@
   height: 112px;
   width: 5px;
   margin: auto;
-  margin-left: 10px;
+  margin-top: 50px;
+  margin-left: 25px;
   background-color: var(--text-color);
   border-radius: 2px;
   transform: skew(-2deg);
+  animation: cursor-animation 600ms cubic-bezier(0.87, 0, 0.13, 1) infinite alternate;
+}
+
+@keyframes cursor-animation {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .container .operator,
-.container .operator-1,
-.container .operator-2,
+.container .operand-1,
+.container .operand-2,
 .container .equals {
   font-size: 7rem;
   font-family: 'Over the Rainbow', cursive;
-  margin: 0 15px;
   text-shadow: 2px 5px 6px #33333377;
-  min-width: 80px;
-}
-
-.delay-0 {
-  animation-delay: 0ms;
-  animation-duration: 8500ms;
-}
-
-.delay-1 {
-  animation-delay: 700ms;
-  animation-duration: 12000ms;
-
-}
-
-.delay-2 {
-  animation-delay: 1500ms;
-  animation-duration: 14500ms;
-}
-
-.delay-3 {
-  animation-delay: 2200ms;
+  min-width: 100px;
+  font-stretch: 200%;
 }
 
 .decorative-blob {
@@ -95,38 +95,9 @@
   z-index: -1;
 }
 
-.animation,
-.animation span {
-  animation-fill-mode: both;
-  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  animation-iteration-count: infinite;
-  display: inline-block
-}
-
-.fade {
-  animation-name: fade
-}
-
-@keyframes fade {
-  0% {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-
-  8% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  92% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(100%);
+@media only screen and (max-width: 1200px) {
+  .decorative-blob {
+    left: -600px;
+    top: 35%;
   }
 }
-
-@media only screen and (max-width: 750px) {}

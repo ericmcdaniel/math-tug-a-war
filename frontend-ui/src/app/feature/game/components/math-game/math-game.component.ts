@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subscription, take, takeWhile, timer } from 'rxjs';
 import { MessageService } from '../../../../core/services/message.service';
@@ -14,7 +14,7 @@ import { MathLogicService } from '../../services/math-logic.service';
   templateUrl: './math-game.component.html',
   styleUrls: ['./math-game.component.css']
 })
-export class MathGameComponent implements AfterViewInit {
+export class MathGameComponent implements AfterViewInit, OnDestroy {
 
   // hold a reference to the input only to force focus if user clicks away
   @ViewChild('solution', { static: false }) input: ElementRef<HTMLInputElement>;
@@ -65,6 +65,10 @@ export class MathGameComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.input.nativeElement.focus();
     this.startTimer();
+  }
+
+  ngOnDestroy(): void {
+    if (this.timer$ && !this.timer$.closed) this.timer$.unsubscribe();
   }
 
   startTimer(): void {
