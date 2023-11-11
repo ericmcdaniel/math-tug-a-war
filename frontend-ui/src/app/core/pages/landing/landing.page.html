@@ -1,11 +1,24 @@
 <img src="assets/landing-page-blob.svg" class="decorative-blob">
 
-<div class="cta">
-  <main>
-    <img src="assets/gamelogo-dark-transparent.png" alt="Math Tug a War Logo">
-  </main>
-  <section>
-    <p>A quick-action mental-math game for students and hobbyists</p>
-    <button mat-raised-button color="primary" routerLink="single-player">Play a single-player game</button>
-  </section>
+<div class="container">
+
+  <div class="cta">
+    <main>
+      <img src="assets/gamelogo-dark-transparent.png" alt="Math Tug a War Logo">
+    </main>
+    <section>
+      <p>A quick-action mental-math game for students and hobbyists</p>
+      <button mat-raised-button color="primary" routerLink="single-player">Play a single-player game</button>
+    </section>
+  </div>
+
+  <div class="decorative-math">
+    <span class="operator-1 animation sequence fade delay-0">{{displayOp1 | async}}</span>
+    <span class="operator animation sequence fade delay-2">+</span>
+    <span class="operator-2 animation sequence fade delay-1">{{displayOp2 | async}}</span>
+    <div class="static-equation delay-3">
+      <span class="equals animation">=</span>
+      <div class="blinking-cursor"></div>
+    </div>
+  </div>
 </div>

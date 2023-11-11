@@ -1,43 +1,132 @@
-.cta {
+.container {
+  display: flex;
+  height: 100vh;
+  margin-left: 10%;
+}
+
+.container .cta {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin-left: 10%;
-  height: 100vh;
   width: 700px;
-
 }
 
-.cta main img {
+.container .cta main img {
   object-fit: contain;
   width: 100%;
   margin: auto;
 }
 
-.cta section {
+.container .cta section {
   display: flex;
   flex-direction: column;
   width: 100%;
   align-items: center;
 }
 
-.cta section p {
+.container .cta section p {
   margin-top: -5px;
   font-size: 1.1rem;
 }
 
-.cta section button {
+.container .cta section button {
   font-size: 1rem;
+}
+
+.container .decorative-math {
+  display: flex;
+  min-width: 600px;
+  width: 55%;
+  justify-content: center;
+  align-items: center;
+}
+
+.container .static-equation {
+  display: flex;
+}
+
+.container .static-equation .blinking-cursor {
+  height: 112px;
+  width: 5px;
+  margin: auto;
+  margin-left: 10px;
+  background-color: var(--text-color);
+  border-radius: 2px;
+  transform: skew(-2deg);
+}
+
+.container .operator,
+.container .operator-1,
+.container .operator-2,
+.container .equals {
+  font-size: 7rem;
+  font-family: 'Over the Rainbow', cursive;
+  margin: 0 15px;
+  text-shadow: 2px 5px 6px #33333377;
+  min-width: 80px;
+}
+
+.delay-0 {
+  animation-delay: 0ms;
+  animation-duration: 8500ms;
+}
+
+.delay-1 {
+  animation-delay: 700ms;
+  animation-duration: 12000ms;
+
+}
+
+.delay-2 {
+  animation-delay: 1500ms;
+  animation-duration: 14500ms;
+}
+
+.delay-3 {
+  animation-delay: 2200ms;
 }
 
 .decorative-blob {
   position: fixed;
-  /* right: -750px; */
   left: clamp(35%, 37%, 40%);
   top: -1200px;
   width: 2300px;
   z-index: -1;
+}
+
+.animation,
+.animation span {
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-iteration-count: infinite;
+  display: inline-block
+}
+
+.fade {
+  animation-name: fade
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  8% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  92% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
 }
 
 @media only screen and (max-width: 750px) {}
