@@ -1,7 +1,7 @@
 .container {
   display: flex;
   height: 100vh;
-  margin-left: 5%;
+  flex-direction: row;
 }
 
 .container .cta {
@@ -10,6 +10,7 @@
   align-items: flex-start;
   justify-content: center;
   width: 800px;
+  margin-left: 5%;
 }
 
 .container .cta main img {
@@ -43,8 +44,6 @@
 }
 
 .container .decorative-math {
-  height: 500px;
-  margin-top: 300px;
   display: flex;
   transform: rotate(-5deg);
   overflow: clip;
@@ -95,9 +94,51 @@
   z-index: -1;
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1150px) {
   .decorative-blob {
     left: -600px;
     top: 35%;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+
+  .container .cta {
+    width: auto;
+    margin: 0;
+    padding: 3%;
+    height: 40%;
+  }
+
+  .container .cta section p {
+    margin-top: 0px;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .container .decorative-math-container {
+    width: auto;
+    align-items: start;
+    min-width: 0;
+  }
+
+  .container .decorative-math {
+    margin-top: 0;
+  }
+
+  .container .operator,
+  .container .operand-1,
+  .container .operand-2,
+  .container .equals {
+    font-size: 3rem;
+    min-width: 50px;
+  }
+
+  .container .static-equation .blinking-cursor {
+    height: 60px;
+    margin: auto;
+    margin-top: 20px;
+    margin-left: 25px;
   }
 }
