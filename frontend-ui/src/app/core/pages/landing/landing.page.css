@@ -62,7 +62,9 @@
   background-color: var(--text-color);
   border-radius: 2px;
   transform: skew(-2deg);
-  animation: cursor-animation 600ms cubic-bezier(0.87, 0, 0.13, 1) infinite alternate;
+  animation: cursor-animation 600ms cubic-bezier(0.92, 0, 0.08, 1) infinite alternate;
+  animation-delay: 2000ms;
+  opacity: 0;
 }
 
 @keyframes cursor-animation {
@@ -76,14 +78,45 @@
 }
 
 .container .operator,
-.container .operand-1,
-.container .operand-2,
+.container .op-left,
+.container .op-right,
 .container .equals {
   font-size: 7rem;
   font-family: 'Over the Rainbow', cursive;
   text-shadow: 2px 5px 6px #33333377;
   min-width: 100px;
   font-stretch: 200%;
+  opacity: 0;
+  animation: delayStart 1500ms cubic-bezier(0.87, 0, 0.13, 1) 235ms 1 forwards;
+}
+
+
+.container .op-left {
+  animation-delay: 320ms;
+}
+
+.container .op-right {
+  animation-delay: 500ms;
+}
+
+.container .operator {
+  animation-delay: 845ms;
+}
+
+.container .equals {
+  animation-delay: 1050ms;
+}
+
+@keyframes delayStart {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .decorative-blob {
@@ -128,8 +161,8 @@
   }
 
   .container .operator,
-  .container .operand-1,
-  .container .operand-2,
+  .container .op-left,
+  .container .op-right,
   .container .equals {
     font-size: 3rem;
     min-width: 50px;

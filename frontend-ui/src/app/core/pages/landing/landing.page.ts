@@ -1,6 +1,6 @@
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription, interval, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, delay, interval, tap } from 'rxjs';
 import { UserService } from '../../services/user.service';
 
 const ANIMATION_TIME = 1500;
@@ -10,6 +10,8 @@ const ANIMATION_TIME = 1500;
   templateUrl: './landing.page.html',
   styleUrls: ['./landing.page.css'],
   animations: [
+    // This animation is tightly coupled with the TS logic of changing the Operand number
+    // on screen, which is why it's rendered by Angular and not pre CSS.
     trigger('ctaDisplayProblem', [
       transition('show => hide', [
         animate(`${ANIMATION_TIME}ms cubic-bezier(0.87, 0, 0.13, 1)`, keyframes([
@@ -41,11 +43,11 @@ const ANIMATION_TIME = 1500;
 export class LandingPage implements AfterViewInit, OnDestroy {
   shouldShowLeft = true;
   shouldShowRight = true;
-  displayOpLeft = new BehaviorSubject<number>(this.randNumber());
-  displayOpRight = new BehaviorSubject<number>(this.randNumber());
+  operatorLeft = new BehaviorSubject<number>(this.randNumber());
+  operatorRight = new BehaviorSubject<number>(this.randNumber());
 
-  operatorLeft$: Subscription;
-  operatorRight$: Subscription;
+  operSubLeft$: Subscription;
+  operSubRight$: Subscription;
 
   constructor(private user: UserService) { }
 
@@ -54,39 +56,54 @@ export class LandingPage implements AfterViewInit, OnDestroy {
       if (!user) this.user.logInUser();
     });
 
-    this.operatorLeft$ = this.swapCtaDisplayNumbers({ totalTime: 8533, isLeftOperand: true }).subscribe();
-    this.operatorRight$ = this.swapCtaDisplayNumbers({ totalTime: 11273, isLeftOperand: false }).subscribe();
+    this.operSubLeft$ = this.swapCtaDisplayNumbers({ totalTime: 8537, isLeftOp: true }).subscribe();
+    this.operSubRight$ = this.swapCtaDisplayNumbers({ totalTime: 11273, isLeftOp: false }).subscribe();
   }
 
-
-
-  swapCtaDisplayNumbers({ totalTime, isLeftOperand }: { totalTime: number, isLeftOperand: boolean; }): Observable<number> {
+  swapCtaDisplayNumbers({ totalTime, isLeftOp }: { totalTime: number, isLeftOp: boolean; }): Observable<number> {
     return interval(totalTime)
       .pipe(
-        tap(() => (isLeftOperand) ? (this.shouldShowLeft = false) : (this.shouldShowRight = false)),
-        switchMap(() => {
-          return interval(ANIMATION_TIME / 2).pipe(take(1), tap(() => {
-            if (isLeftOperand) {
-              this.displayOpLeft.next(this.randNumber());
-            } else {
-              this.displayOpRight.next(this.randNumber());
-            }
-          }));
-        })).pipe(switchMap(() => {
-          return interval(ANIMATION_TIME)
-            .pipe(
-              take(1),
-              tap(() => (isLeftOperand) ? (this.shouldShowLeft = true) : (this.shouldShowRight = true)));
-        }));
+        tap(() => this.toggleOpDisplay(isLeftOp)),
+        delay(ANIMATION_TIME / 2),
+        tap(() => this.setOperator(isLeftOp)),
+        delay(ANIMATION_TIME),
+        tap(() => this.toggleOpDisplay(isLeftOp)));
   }
 
-  randNumber(): number {
-    return Math.floor(Math.random() * 10);
+  toggleOpDisplay(useLeftOp: boolean): void {
+    if (useLeftOp) {
+      this.shouldShowLeft = !this.shouldShowLeft;
+    } else {
+      this.shouldShowRight = !this.shouldShowRight;
+    }
+  }
+
+  setOperator(isLeftOp: boolean): void {
+    if (isLeftOp) {
+      const prevValue = this.operatorLeft.getValue();
+      this.operatorLeft.next(this.randNumber(prevValue));
+      return;
+    }
+    const prevValue = this.operatorRight.getValue();
+    this.operatorRight.next(this.randNumber(prevValue));
+    return;
+  }
+
+  /*
+   * Ensure that the randomly generated number is always unique. This was made after
+   * seeing 5, 5, 5, 5 one too many times.
+   */
+  randNumber(removeElement?: number): number {
+    const choices = Array(10).fill(-1).map((_, idx) => idx);
+    if (removeElement) {
+      choices.splice(removeElement, 1);
+    }
+    return choices[Math.floor(Math.random() * choices.length)];
   }
 
   ngOnDestroy(): void {
     // close open subscriptions to prevent memory leaks
-    if (this.operatorLeft$ && !this.operatorLeft$.closed) this.operatorLeft$.unsubscribe();
-    if (this.operatorRight$ && !this.operatorRight$.closed) this.operatorRight$.unsubscribe();
+    if (this.operSubLeft$ && !this.operSubLeft$.closed) this.operSubLeft$.unsubscribe();
+    if (this.operSubRight$ && !this.operSubRight$.closed) this.operSubRight$.unsubscribe();
   }
 }

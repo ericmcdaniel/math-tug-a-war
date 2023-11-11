@@ -13,9 +13,9 @@
 
   <div class="decorative-math-container">
     <div class="decorative-math">
-      <span [@ctaDisplayProblem]="shouldShowLeft ? 'show' : 'hide'" class="operand-1">{{displayOpLeft | async}}</span>
+      <span [@ctaDisplayProblem]="shouldShowLeft ? 'show' : 'hide'" class="op-left">{{ operatorLeft | async}}</span>
       <span class="operator">+</span>
-      <span [@ctaDisplayProblem]="shouldShowRight ? 'show' : 'hide'" class="operand-2">{{displayOpRight | async}}</span>
+      <span [@ctaDisplayProblem]="shouldShowRight ? 'show' : 'hide'" class="op-right">{{ operatorRight | async}}</span>
       <div class="static-equation">
         <span class="equals">=</span>
         <div class="blinking-cursor"></div>
