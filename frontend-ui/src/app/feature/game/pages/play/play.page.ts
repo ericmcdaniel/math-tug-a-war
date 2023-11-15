@@ -4,7 +4,6 @@ import { MathLogicService } from '../../services/math-logic.service';
 @Component({
   selector: 'app-play-ui',
   templateUrl: './play.page.html',
-  styleUrls: ['./play.page.css']
 })
 export class PlayPage {
 
