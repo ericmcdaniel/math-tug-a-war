@@ -1,11 +1,9 @@
 <div class="game-container">
-  <div class="game-wrapper">
-    <div *ngIf="isGettingReady; else playGame">
-      <p>You have ten math questions to solve in ten seconds.</p>
-      <p>Press <code>ENTER</code> when you're ready to start the game.</p>
-    </div>
-    <ng-template #playGame>
-      <app-math-game></app-math-game>
-    </ng-template>
+  <div class="game-wrapper" *ngIf="isGettingReady; else playGame">
+    <p>You have ten math questions to solve in ten seconds.</p>
+    <p>Press <code>ENTER</code> when you're ready to start the game.</p>
   </div>
+  <ng-template #playGame>
+    <app-math-game></app-math-game>
+  </ng-template>
 </div>

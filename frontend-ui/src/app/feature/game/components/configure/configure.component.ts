@@ -20,11 +20,15 @@ export class ConfigureComponent implements OnInit {
   }
 
   difficulty = ['Easy', 'Medium', 'Hard'];
-  selectedDifficulty: Difficulty | '--' = '--';
+  selectedDifficulty: Difficulty | undefined;
 
   onSubmit(form: NgForm) {
     this.mathService.setDifficulty(this.selectedDifficulty as Difficulty);
     this.router.navigate(['play'], { relativeTo: this.route });
+  }
+
+  getDifficulty(difficulty: string) {
+    this.selectedDifficulty = difficulty.toLowerCase() as Difficulty;
   }
 
 }

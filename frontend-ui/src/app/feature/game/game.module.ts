@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatRadioModule } from '@angular/material/radio';
 import { AppRoutingModule } from '../../app-routing.module';
 
 import { ConfigureComponent } from './components/configure/configure.component';
@@ -27,7 +29,9 @@ import { SinglePlayerPage } from './pages/single-player/single-player.page';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatRadioModule,
+    MatButtonModule
   ]
 })
 export class GameModule { }

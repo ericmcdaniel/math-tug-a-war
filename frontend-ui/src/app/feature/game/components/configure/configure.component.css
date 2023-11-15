@@ -1,0 +1,12 @@
+.configuration-form {
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep .difficulty-selection * {
+  color: var(--text-color) !important;
+}
+
+::ng-deep .mdc-radio__outer-circle {
+  border-color: var(--text-color) !important;
+}
