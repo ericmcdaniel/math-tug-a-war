@@ -44,8 +44,8 @@ export class MathLogicService {
     this.gameResults$.next({ ...this.gameResults$.getValue(), correct: currentScore + 1 });
   }
 
-  public getDifficulty(): Difficulty {
-    return this.difficulty$.getValue();
+  public getDifficulty(): Observable<Difficulty> {
+    return this.difficulty$;
   }
 
   public setDifficulty(difficulty: Difficulty): void {

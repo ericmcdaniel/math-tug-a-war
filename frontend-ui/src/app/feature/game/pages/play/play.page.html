@@ -1,7 +1,28 @@
 <div class="game-container">
   <div class="game-wrapper" *ngIf="isGettingReady; else playGame">
-    <p>You have ten math questions to solve in ten seconds.</p>
-    <p>Press <code>ENTER</code> when you're ready to start the game.</p>
+    <h1 class="game-display-title">Single Player Game</h1>
+    <h2 class="game-display-subtitle">Game initialization</h2>
+    <div class="game-directions">
+      <p>You selected {{ difficulty | async }} mode. You have ten seconds to solve ten math questions. Your
+        score will be reported after all questions have been answered or skipped.</p>
+      <h2 class="game-start">When you're ready, press <code>ENTER</code> to start the game.</h2>
+    </div>
+    <div class="game-controls">
+      <p>Gameplay Controls Review</p>
+      <ul>
+        <li>When you have the answer, just type the number into the keyboard.
+          <ul>
+            <li>Usage of mouse is not required.</li>
+          </ul>
+        </li>
+        <li>Press <code>Enter</code> to submit your answer</li>
+        <li>Press <code>Space</code> to skip the question.</li>
+      </ul>
+    </div>
+    <div class="return-link-container">
+      <a class="return-link" routerLink="../">Adjust game settings</a>
+      <a class="return-link" routerLink="../../">Return home</a>
+    </div>
   </div>
   <ng-template #playGame>
     <app-math-game></app-math-game>

@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Over+the+Rainbow&family=Raleway:wght@300;400&display=swap');
+
 :root {
+
   --text-color: #d1d0c5;
   --primary-theme-color: #00736b;
 }
@@ -16,13 +19,39 @@ body {
   color: var(--text-color);
 }
 
+html,
+body {
+  height: 100%;
+}
+
 a {
   color: var(--text-color);
 }
 
-html,
-body {
-  height: 100%;
+.return-link {
+  font-size: 0.9rem;
+}
+
+.return-link-container {
+  margin-top: 2rem;
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+}
+
+.game-display-title {
+  font-size: 2rem;
+  font-weight: 400;
+  text-shadow: 1px 1px 3px #00000070;
+  text-align: center;
+  margin: 0;
+}
+
+.game-display-subtitle {
+  font-size: 1.1rem;
+  font-weight: 300;
+  text-align: center;
+  margin: 0 0 1.5rem;
 }
 
 .game-container {
@@ -54,10 +83,10 @@ body {
   position: absolute;
   width: 1000px;
   height: 1000px;
-  left: -25%;
-  top: -70%;
-  background: linear-gradient(155deg, var(--primary-theme-color), #00564e);
-  animation: background-wave linear 10s infinite;
+  left: -150px;
+  top: -250px;
+  background: linear-gradient(155deg, var(--primary-theme-color), #00433c);
+  animation: background-wave linear 15s infinite;
 }
 
 @keyframes background-wave {
