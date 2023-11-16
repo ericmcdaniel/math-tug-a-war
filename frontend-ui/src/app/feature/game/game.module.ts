@@ -4,8 +4,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
-import { AppRoutingModule } from '../../app-routing.module';
 
+import { AppRoutingModule } from '../../app-routing.module';
 import { ConfigureComponent } from './components/configure/configure.component';
 import { MathGameComponent } from './components/math-game/math-game.component';
 import { ResultsComponent } from './components/results/results.component';
