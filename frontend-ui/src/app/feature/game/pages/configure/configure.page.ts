@@ -12,11 +12,11 @@ import { Component } from '@angular/core';
 `,
   styles: [`
   .title {
-    font-size: 1.6rem;
+    font-size: 1.75rem;
     font-weight: 400;
     text-shadow: 1px 1px 3px #00000070;
     text-align: center;
-    margin-top: 0;
+    margin: 0;
   }
 `]
 })

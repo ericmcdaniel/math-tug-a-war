@@ -1,6 +1,35 @@
+.subtitle {
+  font-size: 1.1rem;
+  font-weight: 300;
+  text-align: center;
+  margin: 0 0 1.5rem;
+}
+
 .configuration-form {
   display: flex;
   flex-direction: column;
+}
+
+.difficulty-options {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.directions {
+  margin-top: 1.5rem;
+}
+
+.directions-header {
+  font-size: 0.9rem;
+  margin: 0 0 0.3rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.directions-block,
+.directions-block>* {
+  font-size: 0.825rem;
+  margin: 0;
 }
 
 ::ng-deep .difficulty-selection * {
