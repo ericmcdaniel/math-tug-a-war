@@ -3,11 +3,16 @@
 <div class="container">
   <div class="cta">
     <main>
-      <img src="assets/gamelogo-dark-transparent.png" alt="Math Tug a War Logo">
+      <img src="assets/gamelogo.png" alt="Math Tug a War Logo">
+      <h1 class="cta-title">Math Tug-a-War</h1>
     </main>
     <section>
       <p>A quick-action mental-math game for students and hobbyists</p>
-      <button mat-raised-button color="primary" routerLink="single-player">Play a single-player game</button>
+      <button mat-raised-button color="primary" routerLink="single-player" [disabled]="isMobile$ | async">
+        Play a single-player game
+      </button>
+      <p *ngIf="isMobile$ | async" class="no-support">Unfortunately there is no mobile support because a keyboard is
+        required to play this game. Please visit this site from a desktop PC or laptop to continue.</p>
     </section>
   </div>
 

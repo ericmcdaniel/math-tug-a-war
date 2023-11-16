@@ -1,6 +1,7 @@
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription, delay, interval, tap } from 'rxjs';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { AfterContentInit, AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, Subscription, delay, interval, map, tap } from 'rxjs';
 import { UserService } from '../../services/user.service';
 
 const ANIMATION_TIME = 1500;
@@ -40,7 +41,7 @@ const ANIMATION_TIME = 1500;
     ]),
   ]
 })
-export class LandingPage implements AfterViewInit, OnDestroy {
+export class LandingPage implements AfterViewInit, AfterContentInit, OnDestroy {
   shouldShowLeft = true;
   shouldShowRight = true;
   operatorLeft = new BehaviorSubject<number>(this.randNumber());
@@ -49,7 +50,9 @@ export class LandingPage implements AfterViewInit, OnDestroy {
   operSubLeft$: Subscription;
   operSubRight$: Subscription;
 
-  constructor(private user: UserService) { }
+  isMobile$: Observable<boolean>;
+
+  constructor(private user: UserService, private breakpoint: BreakpointObserver) { }
 
   ngAfterViewInit(): void {
     this.user.getUser().subscribe(user => {
@@ -58,6 +61,11 @@ export class LandingPage implements AfterViewInit, OnDestroy {
 
     this.operSubLeft$ = this.swapCtaDisplayNumbers({ totalTime: 8537, isLeftOp: true }).subscribe();
     this.operSubRight$ = this.swapCtaDisplayNumbers({ totalTime: 11273, isLeftOp: false }).subscribe();
+
+  }
+
+  ngAfterContentInit(): void {
+    this.isMobile$ = this.breakpoint.observe(['(max-width: 1150px)']).pipe(map(bp => bp.matches));
   }
 
   swapCtaDisplayNumbers({ totalTime, isLeftOp }: { totalTime: number, isLeftOp: boolean; }): Observable<number> {
