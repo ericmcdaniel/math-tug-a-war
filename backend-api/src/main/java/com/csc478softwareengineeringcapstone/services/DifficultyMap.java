@@ -8,8 +8,8 @@ public class DifficultyMap {
 
     static {
         map.put("easy", new DifficultyProperties(2, 9, 12, true));
-        map.put("medium", new DifficultyProperties(3, 20, 15, false));
-        map.put("hard", new DifficultyProperties(3, 100, 20, false));
+        map.put("medium", new DifficultyProperties(3, 9, 12, false));
+        map.put("hard", new DifficultyProperties(4, 9, 12, false));
     }
 
     public static DifficultyProperties getProperties(String difficulty) {

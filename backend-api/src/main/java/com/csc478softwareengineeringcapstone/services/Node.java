@@ -10,7 +10,17 @@ public class Node {
     }
 
     public String getValue() {
-        return this.value;
+        switch (value) {
+            case "+":
+            case "-":
+                return value;
+            case "*":
+                return "\\times";
+            case "/":
+                return "\\div";
+            default:
+                return value;
+        }
     }
 
     public Node getLeft() {

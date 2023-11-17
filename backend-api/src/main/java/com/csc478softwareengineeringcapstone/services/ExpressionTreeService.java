@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 public class ExpressionTreeService {
     private Node root;
     private String[] operators = { "+", "-", "*", "/" };
+    private String[] leftParenthesis = { "(", "\\big(", "\\Big(", "\\bigg(", "\\Bigg(", "\\Biggr(" };
+    private String[] rightParenthesis = { ")", "\\big)", "\\Big)", "\\bigg)", "\\Bigg)", "\\Biggr)" };
     private RandomInt random;
     private DifficultyProperties difficulty;
 
@@ -120,23 +122,31 @@ public class ExpressionTreeService {
         this.IS_DIVISIBLE_BY_ONE = this.difficulty.isDivideByOne();
 
         this.root = generateSubTree(this.MAX_DEPTH, true);
-        return inOrderTraversal(this.root);
+        int actualHeight = getTreeHeight(this.root);
+        return inOrderTraversal(this.root, actualHeight);
     }
 
-    private String inOrderTraversal(Node node) {
+    private int getTreeHeight(Node node) {
+        if (node == null)
+            return 0;
+        return 1 + Math.max(getTreeHeight(node.left), getTreeHeight(node.right));
+    }
 
+    private String inOrderTraversal(Node node, int depth) {
         if (node == null) {
             return "";
         }
 
-        String left = inOrderTraversal(node.left);
-        String right = inOrderTraversal(node.right);
+        String left = inOrderTraversal(node.left, depth - 1);
+        String right = inOrderTraversal(node.right, depth - 1);
 
         // Writing out the expression
         if (node.left != null && node.right != null) {
-            return "(" + left + " " + node.value + " " + right + ")";
+            return leftParenthesis[depth - 1]
+                    + left + " " + node.getValue() + " " + right
+                    + rightParenthesis[depth - 1];
         } else {
-            return node.value;
+            return node.getValue();
         }
     }
 

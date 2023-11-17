@@ -3,6 +3,10 @@
   flex-direction: column;
 }
 
+.configuration-form button {
+  font: var(--default-font);
+}
+
 .difficulty-options {
   display: flex;
   justify-content: space-evenly;

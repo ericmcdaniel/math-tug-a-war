@@ -15,7 +15,7 @@ import { Difficulty, MathLogicService } from '../../services/math-logic.service'
       text-align: center;
       font-size: 1.5rem;
       font-weight: 400;
-      margin: 3rem 0;
+      margin: 2.5rem 0 3.5rem;
     }`,
     `.game-controls li {
       font-size: 0.9rem;
