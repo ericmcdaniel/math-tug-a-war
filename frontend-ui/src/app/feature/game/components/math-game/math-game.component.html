@@ -1,5 +1,6 @@
 <form class="playable-game">
-  <div class="new-problem">{{ (expression$ | async)?.equation }}</div>
+  <ngx-katex class="new-problem"
+    [equation]="(expression$ | async)?.equation!.replaceAll('/', '\\div').replaceAll('*', '\\times')"></ngx-katex>
   <input #solution [formControl]="userInput" type="text">
   <small>Press <code>enter</code> to submit</small>
   <small>Press <code>space</code> to skip</small>

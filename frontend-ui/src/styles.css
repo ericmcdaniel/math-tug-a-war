@@ -1,14 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Over+the+Rainbow&family=Raleway:wght@300;400&display=swap');
+@import '~katex/dist/katex.css';
 
 :root {
-
   --text-color: #d1d0c5;
   --primary-theme-color: #00736b;
-}
-
-* {
-  font-family: 'Raleway', sans-serif;
-  font-size: 16px;
+  --default-font: 'Raleway', sans-serif;
 }
 
 body {
@@ -22,6 +18,7 @@ body {
 html,
 body {
   height: 100%;
+  font-family: var(--default-font);
 }
 
 a {

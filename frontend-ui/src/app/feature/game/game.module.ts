@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
+import { NgxKatexModule } from 'ngx-katex';
 
 import { AppRoutingModule } from '../../app-routing.module';
 import { ConfigureComponent } from './components/configure/configure.component';
@@ -30,6 +31,7 @@ import { SinglePlayerPage } from './pages/single-player/single-player.page';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxKatexModule,
     MatRadioModule,
     MatButtonModule
   ]

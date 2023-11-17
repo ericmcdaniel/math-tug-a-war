@@ -1,6 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgxKatexModule } from 'ngx-katex';
 import { BehaviorSubject, of } from 'rxjs';
 import { MessageService } from '../../../../core/services/message.service';
 import { GameResults } from '../../models/game-results.model';
@@ -26,7 +28,9 @@ describe('MathGameComponent', () => {
       declarations: [MathGameComponent],
       imports: [
         RouterTestingModule.withRoutes([]),
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        NgxKatexModule,
+        ReactiveFormsModule
       ],
       providers: [
         { provide: MathLogicService, useValue: mockService },
