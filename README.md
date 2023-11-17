@@ -1,4 +1,4 @@
-![Math Tug-a-War Logo](frontend-ui/src/assets/gamelogo.jpg)
+![Math Tug-a-War Logo](frontend-ui/src/assets/gamelogo-full-text-white-bg.jpg)
 <h2 align="center">
   A quick-action mental-math game for students and hobbyists
 </h2>
