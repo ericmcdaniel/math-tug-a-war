@@ -1,6 +1,9 @@
 <form class="playable-game">
-  <ngx-katex class="new-problem" [equation]="(expression$ | async)?.equation!"></ngx-katex>
-  <input #solution [formControl]="userInput" type="text">
+  <div class="written-problem">
+    <ngx-katex *ngIf="(expression$ | async) as expression" class="new-problem"
+      [equation]="(expression.equation) + '='"></ngx-katex>
+    <input #solution [formControl]="userInput" type="text" maxlength="3">
+  </div>
   <small>Press <code>enter</code> to submit</small>
   <small>Press <code>space</code> to skip</small>
   <p>Questions Correct: {{ (mathService.gameResults() | async)?.correct }}</p>

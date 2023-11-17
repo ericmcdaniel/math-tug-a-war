@@ -11,10 +11,10 @@ public class ExpressionTreeService {
     private RandomInt random;
     private DifficultyProperties difficulty;
 
-    private int MAX_DEPTH;
-    private int MAX_RANDOM;
-    private int MAX_MULTIPLY;
-    private boolean IS_DIVISIBLE_BY_ONE;
+    private int maxDepth;
+    private int maxRandom;
+    private int maxMultiply;
+    private boolean isDivisiblyByOne;
 
     public ExpressionTreeService(RandomInt random) {
         this.random = random;
@@ -26,7 +26,7 @@ public class ExpressionTreeService {
     }
 
     private int generateNumber() {
-        return random.nextInt(this.MAX_RANDOM) + 1;
+        return random.nextInt(this.maxRandom) + 1;
     }
 
     private String generateOperator() {
@@ -56,9 +56,9 @@ public class ExpressionTreeService {
          * Perhaps a hard mode only check?
          */
         while (leftValue % rightValue != 0 || rightValue == 0
-                || (!this.IS_DIVISIBLE_BY_ONE && rightValue == 1)) {
+                || (!this.isDivisiblyByOne && rightValue == 1)) {
 
-            if (leftValue == 1 && !this.IS_DIVISIBLE_BY_ONE && rightValue == 1) {
+            if (leftValue == 1 && !this.isDivisiblyByOne && rightValue == 1) {
                 node.left = generateSubTree(depth - 1, false);
                 leftValue = evaluate(node.left);
             }
@@ -72,12 +72,12 @@ public class ExpressionTreeService {
         double rightValue = evaluate(node.right);
 
         // Making sure left and right child of "*" are less than or equal to 12
-        while (leftValue > this.MAX_MULTIPLY || rightValue > this.MAX_MULTIPLY) {
-            if (leftValue > this.MAX_MULTIPLY) {
+        while (leftValue > this.maxMultiply || rightValue > this.maxMultiply) {
+            if (leftValue > this.maxMultiply) {
                 node.left = generateSubTree(depth - 1, false);
                 leftValue = evaluate(node.left);
             }
-            if (rightValue > this.MAX_MULTIPLY) {
+            if (rightValue > this.maxMultiply) {
                 node.right = generateSubTree(depth - 1, false);
                 rightValue = evaluate(node.right);
             }
@@ -92,7 +92,7 @@ public class ExpressionTreeService {
         }
 
         // Choose between creating an operator or operand.
-        if (!firstInvocation && random.nextBoolean()) {
+        if (!firstInvocation && depth <= 2 && random.nextBoolean()) {
             return new Node(String.valueOf(generateNumber()));
         } else {
             String op = generateOperator();
@@ -116,12 +116,12 @@ public class ExpressionTreeService {
     public String generateExpression(String difficulty) {
 
         this.difficulty = DifficultyMap.getProperties(difficulty);
-        this.MAX_DEPTH = this.difficulty.getDepth();
-        this.MAX_RANDOM = this.difficulty.getMaxRandom();
-        this.MAX_MULTIPLY = this.difficulty.getMaxMultiply();
-        this.IS_DIVISIBLE_BY_ONE = this.difficulty.isDivideByOne();
+        this.maxDepth = this.difficulty.getDepth();
+        this.maxRandom = this.difficulty.getMaxRandom();
+        this.maxMultiply = this.difficulty.getMaxMultiply();
+        this.isDivisiblyByOne = this.difficulty.isDivideByOne();
 
-        this.root = generateSubTree(this.MAX_DEPTH, true);
+        this.root = generateSubTree(this.maxDepth, true);
         int actualHeight = getTreeHeight(this.root);
         return inOrderTraversal(this.root, actualHeight);
     }
@@ -178,7 +178,7 @@ public class ExpressionTreeService {
                 }
                 return leftValue - rightValue;
             case "*":
-                if (leftValue > MAX_MULTIPLY || rightValue > MAX_MULTIPLY) {
+                if (leftValue > maxMultiply || rightValue > maxMultiply) {
                     throw new ArithmeticException("Multiplier operator too large");
                 }
                 return leftValue * rightValue;
@@ -186,7 +186,7 @@ public class ExpressionTreeService {
                 if (rightValue == 0) {
                     throw new ArithmeticException("Division by zero");
                 }
-                if (!IS_DIVISIBLE_BY_ONE && rightValue == 1) {
+                if (!isDivisiblyByOne && rightValue == 1) {
                     throw new ArithmeticException("Division by one");
                 }
                 return leftValue / rightValue;

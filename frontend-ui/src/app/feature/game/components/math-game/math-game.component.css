@@ -12,3 +12,20 @@
   min-height: 1.25rem;
   font-size: 2rem;
 }
+
+.written-problem {
+  display: flex;
+  align-items: center;
+}
+
+input[type="text"] {
+  background: none;
+  border: none;
+  outline: none;
+  color: #d1d0c5;
+  margin-left: 0.6rem;
+  padding-top: 0;
+  font: normal 2.4rem KaTeX_Main, 'Times New Roman', serif;
+  caret-color: transparent;
+  width: 100px;
+}
