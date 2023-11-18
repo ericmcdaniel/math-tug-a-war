@@ -63,10 +63,14 @@ public class MathExpressionController {
     Map<String, Object> response = new HashMap<>();
     if (providedAnswer == correctResult) {
       equationsMap.remove(equationID);
-      response.put("message", "Correct answer");
+      response.put("message", "correct");
+      response.put("received", providedAnswer);
+      response.put("actual", correctResult);
       return ResponseEntity.ok(response);
     }
-    response.put("message", "Incorrect answer");
+    response.put("message", "incorrect");
+    response.put("received", providedAnswer);
+    response.put("actual", correctResult);
     return ResponseEntity.ok(response);
   }
 

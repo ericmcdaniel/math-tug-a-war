@@ -98,9 +98,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   }
 
   displayResults(): void {
-    const subscription = this.mathService.score.subscribe(value => this.messageService.score$.next(value));
     this.router.navigate(['../results'], { relativeTo: this.route });
-    subscription.unsubscribe();
   }
 
   userNeedsDirections(): Observable<boolean> {
@@ -130,6 +128,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   getNewMathExpression(addNewScore = 1): void {
     this.mathService.generateExpression().pipe(take(1)).subscribe({
       next: (exprResp: ExpressionResponse) => {
+        this.mathService.updateQuestions(exprResp.equation);
         this.questionsCompleted$.next(this.questionsCompleted$.getValue() + addNewScore);
         this.expression$.next(exprResp);
         this.userInput.setValue('');
@@ -144,9 +143,10 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
     const userRequestToValidate: ValidatedRequest = { id: this.expression$.getValue()?.id || '', answer: this.input.nativeElement.value };
     this.mathService.validateExpression(userRequestToValidate).pipe(take(1)).subscribe({
       next: (validationResp: ValidatedResponse) => {
-        if (validationResp.message === 'Correct answer') {
-          this.mathService.updateScore();
+        if (validationResp.message === 'correct') {
+          this.mathService.setScore();
         }
+        this.mathService.updateResponses(validationResp);
         /* the callback is added here because of the quirky asynchronous nature of JS. The final question would
         get successfully validated but the callee (event host listener) wouldn't see the result in time before
         moving on, resetting the timer 0, generating am 11th question, compounding issues. This solution might

@@ -17,19 +17,41 @@ export class MathLogicService {
   private difficulty$: BehaviorSubject<Difficulty>;
   private score$: BehaviorSubject<number>;
   private questions$: BehaviorSubject<string[]>;
+  private responses$: BehaviorSubject<Omit<ValidatedResponse, 'message'>[]>;
 
   constructor(private http: HttpClient) {
+    this.difficulty$ = new BehaviorSubject<Difficulty>('easy');
     this.score$ = new BehaviorSubject<number>(0);
     this.questions$ = new BehaviorSubject<string[]>([]);
-    this.difficulty$ = new BehaviorSubject<Difficulty>('easy');
+    this.responses$ = new BehaviorSubject<Omit<ValidatedResponse, 'message'>[]>([]);
   }
 
   get score(): Observable<number> {
     return this.score$.asObservable();
   }
 
+  public setScore(): void {
+    this.score$.next(this.score$.getValue() + 1);
+  }
+
   get questions(): Observable<string[]> {
     return this.questions$.asObservable();
+  }
+
+  public updateQuestions(nextQuestion: string): void {
+    this.questions$.next([...this.questions$.getValue(), nextQuestion]);
+  }
+
+  get responses(): Observable<Omit<ValidatedResponse, 'message'>[]> {
+    return this.responses$.asObservable();
+  }
+
+  public updateResponses(response: ValidatedResponse): void {
+    const responseWithoutMessage: Omit<ValidatedResponse, 'message'> = {
+      actual: response.actual,
+      received: response.received
+    };
+    this.responses$.next([...this.responses$.getValue(), responseWithoutMessage]);
   }
 
   public generateExpression(): Observable<ExpressionResponse> {
@@ -43,10 +65,6 @@ export class MathLogicService {
   public initialize(): void {
     this.score$ = new BehaviorSubject<number>(0);
     this.questions$ = new BehaviorSubject<string[]>([]);
-  }
-
-  public updateScore(): void {
-    this.score$.next(this.score$.getValue() + 1);
   }
 
   public getDifficulty(): Observable<Difficulty> {
