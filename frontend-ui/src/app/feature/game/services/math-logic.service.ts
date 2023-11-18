@@ -18,7 +18,7 @@ export class MathLogicService {
   private gameResults$: BehaviorSubject<GameResults>;
   private difficulty$: BehaviorSubject<Difficulty>;
 
-  constructor(private _http: HttpClient) {
+  constructor(private http: HttpClient) {
     this.gameResults$ = new BehaviorSubject<GameResults>({ correct: 0, questions: [] });
     this.difficulty$ = new BehaviorSubject<Difficulty>('easy');
   }
@@ -28,11 +28,11 @@ export class MathLogicService {
   }
 
   public generateExpression(): Observable<ExpressionResponse> {
-    return this._http.get<ExpressionResponse>(environment.apiUrl + 'generate-equation', { params: { difficulty: this.difficulty$.getValue() } });
+    return this.http.get<ExpressionResponse>(environment.apiUrl + 'generate-equation', { params: { difficulty: this.difficulty$.getValue() } });
   }
 
   public validateExpression(request: ValidatedRequest): Observable<ValidatedResponse> {
-    return this._http.post<ValidatedResponse>(environment.apiUrl + 'validate-answer', request);
+    return this.http.post<ValidatedResponse>(environment.apiUrl + 'validate-answer', request);
   }
 
   public initialize(): void {

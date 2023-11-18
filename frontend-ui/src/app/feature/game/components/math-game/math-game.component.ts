@@ -27,7 +27,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     public mathService: MathLogicService,
-    private _messageService: MessageService,
+    private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
@@ -98,7 +98,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   }
 
   displayResults(): void {
-    const subscription = this.mathService.gameResults().subscribe(value => this._messageService.results$.next(value));
+    const subscription = this.mathService.gameResults().subscribe(value => this.messageService.results$.next(value));
     this.router.navigate(['../results'], { relativeTo: this.route });
     subscription.unsubscribe();
   }
@@ -107,12 +107,12 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
     this.questionTimer$.unsubscribe();
     if (error instanceof HttpErrorResponse) {
       if (error.status === 0) {
-        this._messageService.errorMsg$.next(error.message + '. This is most likely because the API server is not running.');
+        this.messageService.errorMsg$.next(error.message + '. This is most likely because the API server is not running.');
       } else {
-        this._messageService.errorMsg$.next(`${error.status} ${error.error.error}. ${error.error.message}`);
+        this.messageService.errorMsg$.next(`${error.status} ${error.error.error}. ${error.error.message}`);
       }
     } else {
-      this._messageService.errorMsg$.next(JSON.stringify(error));
+      this.messageService.errorMsg$.next(JSON.stringify(error));
     }
     this.router.navigate(['../../error'], { relativeTo: this.route });
   }
