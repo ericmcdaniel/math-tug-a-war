@@ -85,7 +85,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
       .subscribe(
         () => {
           if (this.questionsCompleted$.getValue() >= 10) {
-            if (this.input.nativeElement.value !== '') {
+            if (this.userInput.value !== '') {
               this.validateExpression();
             }
             this.questionsCompleted$.next(0);
@@ -132,7 +132,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
       next: (exprResp: ExpressionResponse) => {
         this.questionsCompleted$.next(this.questionsCompleted$.getValue() + addNewScore);
         this.expression$.next(exprResp);
-        this.input.nativeElement.value = '';
+        this.userInput.setValue('');
       },
       error: (error: unknown) => {
         this.handleError(error);

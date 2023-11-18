@@ -1,22 +1,24 @@
+<div class="written-problem">
+  <ngx-katex *ngIf="(expression$ | async)?.equation as expression" class="new-problem"
+    [equation]="(expression) + '='"></ngx-katex>
+  <input #solution [formControl]="userInput" type="text" maxlength="3">
+</div>
 <form class="playable-game">
-  <div class="written-problem">
-    <ngx-katex *ngIf="(expression$ | async) as expression" class="new-problem"
-      [equation]="(expression.equation) + '='"></ngx-katex>
-    <input #solution [formControl]="userInput" type="text" maxlength="3">
-  </div>
   <p>Questions Correct: {{ mathService.score | async }}</p>
   <p>Question {{ questionsCompleted$ | async }} of 10</p>
   <div class="progress-bar">
     <mat-progress-bar *ngIf="progressTimer$ | async as time" color="primary" [value]="time / 10"></mat-progress-bar>
   </div>
-  <!-- <ng-container *ngIf="progressTimer$ | async as time"> -->
-  <!-- <ng-container *ngIf="((mathService.questions | async) as numQuestions"> -->
-  <!-- <div *ngIf="time > 500 && numQuestions.length === 0" class="directions-reminder"> -->
-  <div class="directions-reminder">
-    <small>Type your answer to solve.</small>
-    <small>Press <code>enter</code> to submit.</small>
-    <small>Press <code>space</code> to skip</small>
-  </div>
-  <!-- </ng-container> -->
-  <!-- </ng-container> -->
+  <ng-container *ngIf="progressTimer$ | async as time">
+    <ng-container *ngIf="(mathService.questions | async) as numQuestions">
+      <div *ngIf="time > 500 && numQuestions.length === 0; else blank" class="inactivity-directions animate">
+        <small>Type your answer to solve.</small>
+        <small>Press <code>enter</code> to submit.</small>
+        <small>Press <code>space</code> to skip.</small>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-template #blank>
+    <div class="directions-reminder"></div>
+  </ng-template>
 </form>

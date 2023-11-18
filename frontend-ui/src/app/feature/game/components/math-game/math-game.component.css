@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 35rem;
+  margin-inline: auto;
 }
 
 .playable-game p {
@@ -18,15 +19,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
+  margin-inline: auto;
+  height: 6rem;
 }
 
 input[type="text"] {
-  background: none;
+  background: #0000001a;
+  text-align: center;
+  border-radius: 5px;
   border: none;
+  border-bottom: 2px solid #d1d0c520;
+  box-shadow: inset 8px 8px 20px -10px #00000020;
   outline: none;
   color: #d1d0c5;
   margin-left: 0.6rem;
-  padding: 0;
+  padding: 5px 0;
   font: normal 2.4rem KaTeX_Main, 'Times New Roman', serif;
   caret-color: transparent;
   width: 3ch;
@@ -36,10 +44,14 @@ input[type="text"] {
   margin-top: 1rem;
 }
 
-.directions-reminder {
+.inactivity-directions {
   display: flex;
-  margin-top: 0.5rem;
   justify-content: space-around;
+  align-items: flex-end;
+  height: 1.5rem;
+}
+
+.animate {
   animation: fadeIn 750ms 1;
 }
 
