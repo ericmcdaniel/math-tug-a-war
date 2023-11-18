@@ -47,7 +47,7 @@ public class ExpressionTreeServiceTest {
   void testGeneratedExpressionHasExpectedDepth() {
     // Depth set to four because the test calculates the root as depth 1, 
     // whereas I built the actual function with the root being depth 0.
-    int depth = 4;
+    int depth = 5;
     tree.generateExpression("hard");
     Node rootNode = tree.getRoot();
     int actualDepth = calculateDepth(rootNode);

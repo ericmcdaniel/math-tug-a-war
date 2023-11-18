@@ -31,7 +31,7 @@ jobs:
           file_name: environment.properties
           fail_on_empty: true
 
-      - name: Build with Maven
+      - name: Build and Run Tests
         run: mvn clean install
 
       - name: Upload artifact for deployment job

@@ -50,7 +50,7 @@ public class MathExpressionControllerTest {
         .contentType("application/json")
         .content("{\"id\":\"" + equationID + "\",\"answer\":\"" + correctAnswer + "\"}"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.message").value("Incorrect answer"));
+        .andExpect(jsonPath("$.message").value("incorrect"));
   }
 
 }

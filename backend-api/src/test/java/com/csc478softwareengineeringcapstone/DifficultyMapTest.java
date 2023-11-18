@@ -1,11 +1,14 @@
 package com.csc478softwareengineeringcapstone;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import com.csc478softwareengineeringcapstone.services.DifficultyProperties;
 import com.csc478softwareengineeringcapstone.services.DifficultyMap;
+import com.csc478softwareengineeringcapstone.services.DifficultyProperties;
 
 class DifficultyMapTest {
 
@@ -28,8 +31,8 @@ class DifficultyMapTest {
         DifficultyProperties properties = DifficultyMap.getProperties("medium");
         assertNotNull(properties);
         assertEquals(3, properties.getDepth());
-        assertEquals(20, properties.getMaxRandom());
-        assertEquals(15, properties.getMaxMultiply());
+        assertEquals(9, properties.getMaxRandom());
+        assertEquals(12, properties.getMaxMultiply());
         assertEquals(false, properties.isDivideByOne());
     }
 
@@ -37,9 +40,9 @@ class DifficultyMapTest {
     void testGetPropertiesHard() {
         DifficultyProperties properties = DifficultyMap.getProperties("hard");
         assertNotNull(properties);
-        assertEquals(3, properties.getDepth());
-        assertEquals(100, properties.getMaxRandom());
-        assertEquals(20, properties.getMaxMultiply());
+        assertEquals(4, properties.getDepth());
+        assertEquals(9, properties.getMaxRandom());
+        assertEquals(12, properties.getMaxMultiply());
         assertEquals(false, properties.isDivideByOne());
     }
 

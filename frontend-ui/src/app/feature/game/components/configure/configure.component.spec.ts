@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ConfigureComponent } from './configure.component';
@@ -17,7 +18,8 @@ describe('ConfigureComponent', () => {
         RouterTestingModule.withRoutes([]),
         FormsModule,
         HttpClientTestingModule,
-        MatRadioModule
+        MatRadioModule,
+        MatProgressBarModule
       ],
       providers: [
         HttpClient

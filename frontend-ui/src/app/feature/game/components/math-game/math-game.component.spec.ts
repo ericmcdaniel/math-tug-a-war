@@ -3,9 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgxKatexModule } from 'ngx-katex';
-import { BehaviorSubject, of } from 'rxjs';
+import { of } from 'rxjs';
 import { MessageService } from '../../../../core/services/message.service';
-import { GameResults } from '../../models/game-results.model';
 import { MathLogicService } from '../../services/math-logic.service';
 import { MathGameComponent } from './math-game.component';
 
@@ -14,15 +13,14 @@ describe('MathGameComponent', () => {
   let fixture: ComponentFixture<MathGameComponent>;
   let mockService: Partial<MathLogicService>;
   const MOCK_MATH_RESPONSE = { equation: "1 + 2", id: "1234" };
-  const MOCK_MATH_VALIDATION = { message: "Correct answer" };
+  const MOCK_MATH_VALIDATION = { message: "correct", actual: 3, received: 3 };
 
   beforeEach(() => {
     mockService = {
       generateExpression: jest.fn(() => of(MOCK_MATH_RESPONSE)),
       validateExpression: jest.fn(() => of(MOCK_MATH_VALIDATION)),
       initialize: jest.fn(() => { }),
-      updateScore: jest.fn(() => { }),
-      gameResults: jest.fn(() => new BehaviorSubject<GameResults>({ correct: 0, questions: [] }))
+      setScore: jest.fn(() => { }),
     };
     TestBed.configureTestingModule({
       declarations: [MathGameComponent],
