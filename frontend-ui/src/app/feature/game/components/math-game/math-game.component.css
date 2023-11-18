@@ -24,7 +24,7 @@ input[type="text"] {
   outline: none;
   color: #d1d0c5;
   margin-left: 0.6rem;
-  padding-top: 0;
+  padding: 0;
   font: normal 2.4rem KaTeX_Main, 'Times New Roman', serif;
   caret-color: transparent;
   width: 3ch;

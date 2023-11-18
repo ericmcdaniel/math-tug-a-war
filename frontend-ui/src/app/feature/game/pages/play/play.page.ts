@@ -6,11 +6,6 @@ import { Difficulty, MathLogicService } from '../../services/math-logic.service'
   selector: 'app-play-ui',
   templateUrl: './play.page.html',
   styles: [
-    `.game-links {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 2rem;
-    }`,
     `.game-start {
       text-align: center;
       font-size: 1.5rem;

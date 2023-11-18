@@ -1,8 +1,8 @@
-<div class="game-container">
-  <div class="game-wrapper" *ngIf="isGettingReady; else playGame">
-    <h1 class="game-display-title">Single Player Game</h1>
-    <h2 class="game-display-subtitle">Game initialization</h2>
-    <div class="game-directions">
+<div class="card-container">
+  <div class="card-wrapper" *ngIf="isGettingReady; else playGame">
+    <h1 class="card-display-title">Single Player Game</h1>
+    <h2 class="card-display-subtitle">Game initialization</h2>
+    <div>
       <p>You selected {{ difficulty | async }} mode. You have ten seconds to solve ten math questions. Your
         score will be reported after all questions have been answered or skipped.</p>
       <h2 class="game-start">When you're ready, press <code>ENTER</code> to start the game.</h2>
