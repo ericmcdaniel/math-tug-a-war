@@ -7,6 +7,10 @@
     </mat-radio-button>
   </mat-radio-group>
   <button mat-raised-button color="accent" [disabled]="!selectedDifficulty || !(user.getUser() | async)">Start</button>
+  <div *ngIf="!(user.getUser() | async)" class="server-still-loading">
+    <p>The API server is still loading. This unfortunately can take up to 45 seconds. Please wait.</p>
+    <mat-progress-bar mode="indeterminate" color="warn"></mat-progress-bar>
+  </div>
 </form>
 <div class="directions">
   <p class="directions-header">Directions</p>
@@ -16,4 +20,3 @@
     them.
   </p>
 </div>
-<p *ngIf="!(user.getUser() | async)">The server is still loading, which can take up to 45 seconds. Please wait.</p>

@@ -36,3 +36,12 @@
 ::ng-deep .mdc-radio__outer-circle {
   border-color: var(--text-color) !important;
 }
+
+.server-still-loading {
+  margin-top: 1rem;
+}
+
+.server-still-loading p {
+  color: #d07474;
+  font-weight: 900;
+}

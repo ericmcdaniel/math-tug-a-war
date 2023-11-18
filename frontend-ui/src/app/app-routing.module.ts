@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './core/guards/auth.guard';
 import { ErrorPage } from './core/pages/error/error.page';
 import { LandingPage } from './core/pages/landing/landing.page';
 import { NotFoundPage } from './core/pages/not-found/not-found.page';
@@ -13,8 +14,8 @@ const routes: Routes = [
   {
     path: 'single-player', component: SinglePlayerPage, children: [
       { path: '', component: ConfigurePage, title: 'Math Tug-a-War | Single Player Game' },
-      { path: 'play', component: PlayPage, title: 'Math Tug-a-War | Single Player Game' },
-      { path: 'results', component: ResultsPage, title: 'Math Tug-a-War | Results' },
+      { path: 'play', canActivate: [AuthGuard], component: PlayPage, title: 'Math Tug-a-War | Single Player Game' },
+      { path: 'results', canActivate: [AuthGuard], component: ResultsPage, title: 'Math Tug-a-War | Results' },
     ]
   },
   { path: 'error', component: ErrorPage, title: 'Math Tug-a-War | Error' },
