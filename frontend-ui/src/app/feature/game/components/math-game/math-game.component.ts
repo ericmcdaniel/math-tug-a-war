@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription, take, takeWhile, tap, timer } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, filter, fromEvent, interval, map, take, takeWhile, tap, throttle, timer } from 'rxjs';
 import { MessageService } from '../../../../core/services/message.service';
 import { NumbersOnlyFormControl } from '../../directives/numbers-only.directive';
 import { ExpressionResponse } from '../../models/expression-response.model';
@@ -32,64 +32,69 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
     private route: ActivatedRoute
   ) { }
 
-  @HostListener('document:keypress', ['$event'])
-  handleUserInput(event: KeyboardEvent): void {
-    const enteredInput = this.input.nativeElement.value;
-    if (this.questionsCompleted$.getValue() >= 10) {
-      this.questionTimer$.unsubscribe();
-      if (event.code === 'Space') {
-        this.displayResults();
-      } else if (event.key === 'Enter' && !!enteredInput) {
-        this.validateExpression(() => this.displayResults());
-      }
-      return;
-    }
-    this.input.nativeElement.focus();
-    if (event.code === 'Space') {
-      this.startTimer();
-      return;
-    }
-    if (event.key !== 'Enter') return;
-    if (!enteredInput) return;
-    this.startTimer();
-    this.validateExpression();
-  }
-
   /*
    * if the user clicks away from the input textbox, automatically refocus on to the element
    */
-  @HostListener('document:click', ['$event'])
-  handleClickOnPage(): void {
+  @HostListener('document:click', ['$event']) handleClickOnPage(): void {
     this.input.nativeElement.focus();
   }
 
   ngAfterViewInit(): void {
     this.input.nativeElement.focus();
     this.startTimer();
+    fromEvent<KeyboardEvent>(this.input.nativeElement, 'keydown')
+      .pipe(
+        filter(value => value.code.includes('Enter') || value.code === 'Space'),
+        throttle(() => interval(250)),
+        map((value) => value.key === 'Enter' ? 'Enter' : 'Space'),
+      )
+      .subscribe(key => this.handleUserInput(key));
   }
 
   ngOnDestroy(): void {
     if (this.questionTimer$ && !this.questionTimer$.closed) this.questionTimer$.unsubscribe();
   }
 
+  handleUserInput(input: string): void {
+    const enteredInput = this.input.nativeElement.value;
+    if (this.questionsCompleted$.getValue() >= 10) {
+      this.questionTimer$.unsubscribe();
+      if (input === 'Space') {
+        this.displayResults();
+      } else if (input === 'Enter' && !!enteredInput) {
+        this.validateExpression(() => this.displayResults());
+      }
+      return;
+    }
+    if (input === 'Space') {
+      this.startTimer();
+      return;
+    }
+    if (!enteredInput) return;
+    this.startTimer();
+    this.validateExpression();
+  }
+
   startTimer(): void {
     if (this.questionTimer$ && !this.questionTimer$.closed) this.questionTimer$.unsubscribe();
-    this.questionTimer$ = timer(0, 10000).pipe(
-      tap(() => this.progressTimer$ = timer(0, 10)),
-      takeWhile(() => this.questionsCompleted$.getValue() <= 10),
-    ).subscribe(
-      () => {
-        if (this.questionsCompleted$.getValue() >= 10) {
-          if (this.input.nativeElement.value !== '') {
-            this.validateExpression();
+    this.questionTimer$ = timer(0, 10000)
+      .pipe(
+        tap(() => this.progressTimer$ = timer(0, 10)),
+        takeWhile(() => this.questionsCompleted$.getValue() <= 10),
+      )
+      .subscribe(
+        () => {
+          if (this.questionsCompleted$.getValue() >= 10) {
+            if (this.input.nativeElement.value !== '') {
+              this.validateExpression();
+            }
+            this.questionsCompleted$.next(0);
+            this.questionTimer$.unsubscribe();
+            this.displayResults();
+            return;
           }
-          this.questionsCompleted$.next(0);
-          this.questionTimer$.unsubscribe();
-          this.displayResults();
-          return;
-        }
-        this.getNewMathExpression();
-      });
+          this.getNewMathExpression();
+        });
   }
 
   displayResults(): void {
