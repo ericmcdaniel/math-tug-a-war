@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Subscription, take, takeWhile, timer } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, take, takeWhile, tap, timer } from 'rxjs';
 import { MessageService } from '../../../../core/services/message.service';
 import { NumbersOnlyFormControl } from '../../directives/numbers-only.directive';
 import { ExpressionResponse } from '../../models/expression-response.model';
@@ -22,7 +22,8 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   public userInput = new NumbersOnlyFormControl('');
   public expression$ = new BehaviorSubject<ExpressionResponse | undefined>(undefined);
   public questionsCompleted$ = new BehaviorSubject<number>(0);
-  public timer$: Subscription;
+  public progressTimer$: Observable<number>;
+  public questionTimer$: Subscription;
 
   constructor(
     public mathService: MathLogicService,
@@ -35,7 +36,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   handleUserInput(event: KeyboardEvent): void {
     const enteredInput = this.input.nativeElement.value;
     if (this.questionsCompleted$.getValue() >= 10) {
-      this.timer$.unsubscribe();
+      this.questionTimer$.unsubscribe();
       if (event.code === 'Space') {
         this.displayResults();
       } else if (event.key === 'Enter' && !!enteredInput) {
@@ -68,26 +69,26 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.timer$ && !this.timer$.closed) this.timer$.unsubscribe();
+    if (this.questionTimer$ && !this.questionTimer$.closed) this.questionTimer$.unsubscribe();
   }
 
   startTimer(): void {
-    if (this.timer$ && !this.timer$.closed) this.timer$.unsubscribe();
-    this.timer$ = timer(0, 10000).pipe(takeWhile(() => this.questionsCompleted$.getValue() <= 10)).subscribe(
-      (time) => { // placeholder for getting the exact millisecond for progress bar
-        // if (time % 25 === 0) {
+    if (this.questionTimer$ && !this.questionTimer$.closed) this.questionTimer$.unsubscribe();
+    this.questionTimer$ = timer(0, 10000).pipe(
+      tap(() => this.progressTimer$ = timer(0, 10)),
+      takeWhile(() => this.questionsCompleted$.getValue() <= 10),
+    ).subscribe(
+      () => {
         if (this.questionsCompleted$.getValue() >= 10) {
           if (this.input.nativeElement.value !== '') {
             this.validateExpression();
           }
           this.questionsCompleted$.next(0);
-          this.timer$.unsubscribe();
+          this.questionTimer$.unsubscribe();
           this.displayResults();
           return;
-        } else {
-          this.getNewMathExpression();
         }
-        // }
+        this.getNewMathExpression();
       });
   }
 
@@ -98,7 +99,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   }
 
   handleError(error: unknown) {
-    this.timer$.unsubscribe();
+    this.questionTimer$.unsubscribe();
     if (error instanceof HttpErrorResponse) {
       if (error.status === 0) {
         this._messageService.errorMsg$.next(error.message + '. This is most likely because the API server is not running.');

@@ -27,5 +27,13 @@ input[type="text"] {
   padding-top: 0;
   font: normal 2.4rem KaTeX_Main, 'Times New Roman', serif;
   caret-color: transparent;
-  width: 100px;
+  width: 3ch;
+}
+
+.progress-bar {
+  margin-top: 1rem;
+}
+
+::ng-deep .mdc-linear-progress__bar {
+  transition: none !important;
 }

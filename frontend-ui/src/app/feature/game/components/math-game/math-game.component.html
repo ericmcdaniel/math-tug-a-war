@@ -8,4 +8,7 @@
   <small>Press <code>space</code> to skip</small>
   <p>Questions Correct: {{ (mathService.gameResults() | async)?.correct }}</p>
   <p>Question {{ questionsCompleted$ | async }} of 10</p>
+  <div class="progress-bar">
+    <mat-progress-bar *ngIf="progressTimer$ | async as time" color="primary" [value]="time / 10"></mat-progress-bar>
+  </div>
 </form>

@@ -142,12 +142,11 @@ public class ExpressionTreeService {
 
         // Writing out the expression
         if (node.left != null && node.right != null) {
-            return leftParenthesis[depth - 1]
-                    + left + " " + node.getValue() + " " + right
-                    + rightParenthesis[depth - 1];
-        } else {
-            return node.getValue();
+            return leftParenthesis[depth - 2]
+                    + left + node.getValue() + right
+                    + rightParenthesis[depth - 2];
         }
+        return node.getValue();
     }
 
     public double evaluate(Node node) {

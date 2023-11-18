@@ -12,14 +12,13 @@ const routes: Routes = [
   { path: '', component: LandingPage, title: 'Math Tug-a-War' },
   {
     path: 'single-player', component: SinglePlayerPage, children: [
-      { path: '', component: ConfigurePage, title: 'Math Tug-a-War: Single Player Game' },
-      { path: 'play', component: PlayPage, title: 'Math Tug-a-War: Single Player Game' },
-      { path: 'results', component: ResultsPage, title: 'Math Tug-a-War: Results' },
-      { path: '**', redirectTo: '' }
+      { path: '', component: ConfigurePage, title: 'Math Tug-a-War | Single Player Game' },
+      { path: 'play', component: PlayPage, title: 'Math Tug-a-War | Single Player Game' },
+      { path: 'results', component: ResultsPage, title: 'Math Tug-a-War | Results' },
     ]
   },
-  { path: 'error', component: ErrorPage, title: 'Math Tug-a-War: Error!' },
-  { path: '**', pathMatch: 'full', component: NotFoundPage }
+  { path: 'error', component: ErrorPage, title: 'Math Tug-a-War | Error' },
+  { path: '**', pathMatch: 'full', component: NotFoundPage, title: 'Math Tug-a-War | Page Not Found' }
 ];
 
 @NgModule({

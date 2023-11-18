@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { NgxKatexModule } from 'ngx-katex';
 
@@ -33,7 +34,8 @@ import { SinglePlayerPage } from './pages/single-player/single-player.page';
     HttpClientModule,
     NgxKatexModule,
     MatRadioModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressBarModule
   ]
 })
 export class GameModule { }
