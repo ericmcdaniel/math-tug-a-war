@@ -4,11 +4,19 @@
       [equation]="(expression.equation) + '='"></ngx-katex>
     <input #solution [formControl]="userInput" type="text" maxlength="3">
   </div>
-  <small>Press <code>enter</code> to submit</small>
-  <small>Press <code>space</code> to skip</small>
-  <p>Questions Correct: {{ (mathService.gameResults() | async)?.correct }}</p>
+  <p>Questions Correct: {{ mathService.score | async }}</p>
   <p>Question {{ questionsCompleted$ | async }} of 10</p>
   <div class="progress-bar">
     <mat-progress-bar *ngIf="progressTimer$ | async as time" color="primary" [value]="time / 10"></mat-progress-bar>
   </div>
+  <!-- <ng-container *ngIf="progressTimer$ | async as time"> -->
+  <!-- <ng-container *ngIf="((mathService.questions | async) as numQuestions"> -->
+  <!-- <div *ngIf="time > 500 && numQuestions.length === 0" class="directions-reminder"> -->
+  <div class="directions-reminder">
+    <small>Type your answer to solve.</small>
+    <small>Press <code>enter</code> to submit.</small>
+    <small>Press <code>space</code> to skip</small>
+  </div>
+  <!-- </ng-container> -->
+  <!-- </ng-container> -->
 </form>

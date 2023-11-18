@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { ExpressionResponse } from '../models/expression-response.model';
-import { GameResults } from '../models/game-results.model';
 import { ValidatedRequest } from '../models/validation-request.model';
 import { ValidatedResponse } from '../models/validation-response.model';
 
@@ -15,16 +14,22 @@ export type Difficulty = 'easy' | 'medium' | 'hard';
 })
 export class MathLogicService {
 
-  private gameResults$: BehaviorSubject<GameResults>;
   private difficulty$: BehaviorSubject<Difficulty>;
+  private score$: BehaviorSubject<number>;
+  private questions$: BehaviorSubject<string[]>;
 
   constructor(private http: HttpClient) {
-    this.gameResults$ = new BehaviorSubject<GameResults>({ correct: 0, questions: [] });
+    this.score$ = new BehaviorSubject<number>(0);
+    this.questions$ = new BehaviorSubject<string[]>([]);
     this.difficulty$ = new BehaviorSubject<Difficulty>('easy');
   }
 
-  public gameResults(): Observable<GameResults> {
-    return this.gameResults$.asObservable();
+  get score(): Observable<number> {
+    return this.score$.asObservable();
+  }
+
+  get questions(): Observable<string[]> {
+    return this.questions$.asObservable();
   }
 
   public generateExpression(): Observable<ExpressionResponse> {
@@ -36,12 +41,12 @@ export class MathLogicService {
   }
 
   public initialize(): void {
-    this.gameResults$ = new BehaviorSubject<GameResults>({ correct: 0, questions: [] });
+    this.score$ = new BehaviorSubject<number>(0);
+    this.questions$ = new BehaviorSubject<string[]>([]);
   }
 
   public updateScore(): void {
-    const currentScore = this.gameResults$.getValue()?.correct || 0;
-    this.gameResults$.next({ ...this.gameResults$.getValue(), correct: currentScore + 1 });
+    this.score$.next(this.score$.getValue() + 1);
   }
 
   public getDifficulty(): Observable<Difficulty> {
@@ -51,5 +56,4 @@ export class MathLogicService {
   public setDifficulty(difficulty: Difficulty): void {
     this.difficulty$.next(difficulty);
   }
-
 }

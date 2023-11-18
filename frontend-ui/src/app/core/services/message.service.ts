@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { GameResults } from '../../feature/game/models/game-results.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +8,8 @@ export class MessageService {
 
   public errorMsg$ = new BehaviorSubject<string>('');
 
-  public results$ = new BehaviorSubject<GameResults | undefined>(undefined);
+  public score$ = new BehaviorSubject<number>(0);
+  public questions$ = new BehaviorSubject<string[] | undefined>(undefined);
 
   constructor() { }
 

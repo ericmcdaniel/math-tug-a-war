@@ -1,6 +1,7 @@
 .playable-game {
   display: flex;
   flex-direction: column;
+  width: 35rem;
 }
 
 .playable-game p {
@@ -16,6 +17,7 @@
 .written-problem {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 input[type="text"] {
@@ -34,6 +36,23 @@ input[type="text"] {
   margin-top: 1rem;
 }
 
+.directions-reminder {
+  display: flex;
+  margin-top: 0.5rem;
+  justify-content: space-around;
+  animation: fadeIn 750ms 1;
+}
+
 ::ng-deep .mdc-linear-progress__bar {
   transition: none !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

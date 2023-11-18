@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription, filter, fromEvent, interval, map, take, takeWhile, tap, throttle, timer } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, filter, fromEvent, interval, map, of, switchMap, take, takeWhile, tap, throttle, timer } from 'rxjs';
 import { MessageService } from '../../../../core/services/message.service';
 import { NumbersOnlyFormControl } from '../../directives/numbers-only.directive';
 import { ExpressionResponse } from '../../models/expression-response.model';
@@ -98,9 +98,19 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   }
 
   displayResults(): void {
-    const subscription = this.mathService.gameResults().subscribe(value => this.messageService.results$.next(value));
+    const subscription = this.mathService.score.subscribe(value => this.messageService.score$.next(value));
     this.router.navigate(['../results'], { relativeTo: this.route });
     subscription.unsubscribe();
+  }
+
+  userNeedsDirections(): Observable<boolean> {
+    if (!this.progressTimer$) return of(false);
+    return this.progressTimer$
+      .pipe(
+        tap((t) => console.log(t)),
+        filter(time => (time / 10) > 50),
+        switchMap(() => this.mathService.questions.pipe(map(questions => questions.length === 0))),
+      );
   }
 
   handleError(error: unknown) {
