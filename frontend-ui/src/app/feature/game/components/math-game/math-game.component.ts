@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription, filter, fromEvent, interval, map, of, switchMap, take, takeWhile, tap, throttle, timer } from 'rxjs';
+import { NetworkService } from '../../../../core/services/network.service';
 import { NumbersOnlyFormControl } from '../../directives/numbers-only.directive';
 import { ExpressionResponse } from '../../models/expression-response.model';
 import { ValidatedRequest } from '../../models/validation-request.model';
@@ -118,8 +119,8 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
       },
       error: (error: unknown) => {
         this.questionTimer$.unsubscribe();
-        const errorResp = this.mathService.buildErrorResponse(error);
-        this.router.navigate(['../../error'], { relativeTo: this.route, state: { message: errorResp } });
+        const errorResp = NetworkService.buildErrorResponse(error);
+        this.router.navigate(['/error'], { state: { message: errorResp } });
       }
     });
   }
@@ -139,8 +140,8 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
         if (callbackFn) callbackFn();
       },
       error: (error: unknown) => {
-        const errorResp = this.mathService.buildErrorResponse(error);
-        this.router.navigate(['../../error'], { relativeTo: this.route, state: { message: errorResp } });
+        const errorResp = NetworkService.buildErrorResponse(error);
+        this.router.navigate(['/error'], { state: { message: errorResp } });
       }
     });
   }

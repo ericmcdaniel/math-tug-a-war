@@ -1,8 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { environment } from '../../../../environments/environment';
+import { NetworkService } from '../../../core/services/network.service';
 import { ExpressionResponse } from '../models/expression-response.model';
 import { ValidatedRequest } from '../models/validation-request.model';
 import { ValidatedResponse } from '../models/validation-response.model';
@@ -19,7 +18,7 @@ export class MathLogicService {
   private questions$: BehaviorSubject<string[]>;
   private responses$: BehaviorSubject<Omit<ValidatedResponse, 'message'>[]>;
 
-  constructor(private http: HttpClient) {
+  constructor(private network: NetworkService) {
     this.difficulty$ = new BehaviorSubject<Difficulty>('easy');
     this.score$ = new BehaviorSubject<number>(0);
     this.questions$ = new BehaviorSubject<string[]>([]);
@@ -55,28 +54,11 @@ export class MathLogicService {
   }
 
   public generateExpression(): Observable<ExpressionResponse> {
-    return this.http.get<ExpressionResponse>(environment.apiUrl + 'generate-equation', { params: { difficulty: this.difficulty$.getValue() } });
+    return this.network.generateExpression(this.difficulty$.getValue());
   }
 
   public validateExpression(request: ValidatedRequest): Observable<ValidatedResponse> {
-    return this.http.post<ValidatedResponse>(environment.apiUrl + 'validate-answer', request);
-  }
-
-  public buildErrorResponse(response: unknown): string {
-    let errorMessageForUser: string;
-    if (response instanceof HttpErrorResponse) {
-      if (response.status === 0) {
-        // This is a special case for then the app can't even connect to the API, which HTTPClient interprets
-        // the status code as 0.
-        errorMessageForUser = response.message + '. This is most likely because the API server is not running.';
-      } else {
-        console.log(response);
-        errorMessageForUser = `${response.status} ${response.error.error}. ${response.error.message}`;
-      }
-    } else {
-      errorMessageForUser = JSON.stringify(response);
-    }
-    return errorMessageForUser;
+    return this.network.validateExpression(request);
   }
 
   public initialize(): void {
