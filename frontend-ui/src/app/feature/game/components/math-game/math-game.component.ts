@@ -20,7 +20,6 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
 
   public userInput = new NumbersOnlyFormControl('');
   public expression$ = new BehaviorSubject<ExpressionResponse | undefined>(undefined);
-  public questionsCompleted$ = new BehaviorSubject<number>(0);
   public progressTimer$: Observable<number>;
   public questionTimer$: Subscription;
 
@@ -55,7 +54,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
 
   handleUserInput(input: string): void {
     const enteredInput = this.input.nativeElement.value;
-    if (this.questionsCompleted$.getValue() >= 10) {
+    if (this.mathService.questionsCompleted() >= 10) {
       this.questionTimer$.unsubscribe();
       if (input === 'Space') {
         this.displayResults();
@@ -78,15 +77,14 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
     this.questionTimer$ = timer(0, 10000)
       .pipe(
         tap(() => this.progressTimer$ = timer(0, 10)),
-        takeWhile(() => this.questionsCompleted$.getValue() <= 10),
+        takeWhile(() => this.mathService.questionsCompleted() <= 10),
       )
       .subscribe(
         () => {
-          if (this.questionsCompleted$.getValue() >= 10) {
+          if (this.mathService.questionsCompleted() >= 10) {
             if (this.userInput.value !== '') {
               this.validateExpression();
             }
-            this.questionsCompleted$.next(0);
             this.questionTimer$.unsubscribe();
             this.displayResults();
             return;
@@ -113,7 +111,6 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
     this.mathService.generateExpression().pipe(take(1)).subscribe({
       next: (exprResp: ExpressionResponse) => {
         this.mathService.updateQuestions(exprResp.equation);
-        this.questionsCompleted$.next(this.questionsCompleted$.getValue() + addNewScore);
         this.expression$.next(exprResp);
         this.userInput.setValue('');
       },

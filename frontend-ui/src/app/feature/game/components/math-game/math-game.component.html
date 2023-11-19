@@ -5,7 +5,7 @@
 </div>
 <form class="playable-game">
   <p>Questions Correct: {{ mathService.score | async }}</p>
-  <p>Question {{ questionsCompleted$ | async }} of 10</p>
+  <p>Question {{ (mathService.questions | async)?.length }} of 10</p>
   <div class="progress-bar">
     <mat-progress-bar *ngIf="progressTimer$ | async as time" color="primary" [value]="time / 10"></mat-progress-bar>
   </div>

@@ -41,6 +41,10 @@ export class MathLogicService {
     this.questions$.next([...this.questions$.getValue(), nextQuestion]);
   }
 
+  public questionsCompleted(): number {
+    return this.questions$.getValue().length;
+  }
+
   get responses(): Observable<Omit<ValidatedResponse, 'message'>[]> {
     return this.responses$.asObservable();
   }
