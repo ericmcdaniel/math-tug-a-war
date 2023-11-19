@@ -13,6 +13,9 @@ interface ErrorMessage {
       <h1 class="card-display-title">Yikes!</h1>
       <h2 class="card-display-subtitle">There unfortunately was a fatal error</h2>
       <p>{{ this.errorMessage }}</p>
+      <div class="return-link-container">
+        <a class="return-link" routerLink="/">Go back home</a>   
+      </div>
     </div>
   </div>`
 })

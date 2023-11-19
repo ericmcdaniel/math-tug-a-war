@@ -37,7 +37,7 @@ describe('MathLogicService', () => {
 
   it('should validate a user\'s expression', async () => {
     const spy = jest.spyOn(networkMock, 'validateExpression');
-    const result = service.validateExpression({ id: "123", answer: "3" });
+    const result = service.validateExpression("3");
     await expect(firstValueFrom(result)).resolves.toBeDefined();
     await expect(firstValueFrom(result)).resolves.toEqual(MOCK_MATH_VALIDATION);
     expect(spy).toBeCalledTimes(1);

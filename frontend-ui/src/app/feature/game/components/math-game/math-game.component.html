@@ -1,16 +1,16 @@
 <div class="written-problem">
-  <ngx-katex *ngIf="(expression$ | async)?.equation as expression" class="new-problem"
+  <ngx-katex *ngIf="(service.currentQuestion | async)?.equation as expression" class="new-problem"
     [equation]="(expression) + '='"></ngx-katex>
   <input #solution [formControl]="userInput" type="text" maxlength="3">
 </div>
 <form class="playable-game">
-  <p>Questions Correct: {{ mathService.score | async }}</p>
-  <p>Question {{ (mathService.questions | async)?.length }} of 10</p>
+  <p>Questions Correct: {{ service.score | async }}</p>
+  <p>Question {{ (service.questions | async)?.length }} of 10</p>
   <div class="progress-bar">
     <mat-progress-bar *ngIf="progressTimer$ | async as time" color="primary" [value]="time / 10"></mat-progress-bar>
   </div>
   <ng-container *ngIf="progressTimer$ | async as time">
-    <ng-container *ngIf="(mathService.questions | async) as numQuestions">
+    <ng-container *ngIf="(service.questions | async) as numQuestions">
       <div *ngIf="time > 500 && numQuestions.length === 0; else blank" class="inactivity-directions animate">
         <small>Type your answer to solve.</small>
         <small>Press <code>enter</code> to submit.</small>

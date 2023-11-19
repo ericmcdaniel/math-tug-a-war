@@ -1,10 +1,9 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription, filter, fromEvent, interval, map, of, switchMap, take, takeWhile, tap, throttle, timer } from 'rxjs';
+import { Observable, Subscription, filter, fromEvent, interval, map, of, switchMap, take, takeWhile, tap, throttle, timer } from 'rxjs';
 import { NetworkService } from '../../../../core/services/network.service';
 import { NumbersOnlyFormControl } from '../../directives/numbers-only.directive';
 import { ExpressionResponse } from '../../models/expression-response.model';
-import { ValidatedRequest } from '../../models/validation-request.model';
 import { ValidatedResponse } from '../../models/validation-response.model';
 import { MathLogicService } from '../../services/math-logic.service';
 
@@ -19,12 +18,11 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   @ViewChild('solution', { static: false }) input: ElementRef<HTMLInputElement>;
 
   public userInput = new NumbersOnlyFormControl('');
-  public expression$ = new BehaviorSubject<ExpressionResponse | undefined>(undefined);
   public progressTimer$: Observable<number>;
   public questionTimer$: Subscription;
 
   constructor(
-    public mathService: MathLogicService,
+    public service: MathLogicService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
@@ -54,7 +52,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
 
   handleUserInput(input: string): void {
     const enteredInput = this.input.nativeElement.value;
-    if (this.mathService.questionsCompleted() >= 10) {
+    if (this.service.questionsCompleted() >= 10) {
       this.questionTimer$.unsubscribe();
       if (input === 'Space') {
         this.displayResults();
@@ -77,11 +75,11 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
     this.questionTimer$ = timer(0, 10000)
       .pipe(
         tap(() => this.progressTimer$ = timer(0, 10)),
-        takeWhile(() => this.mathService.questionsCompleted() <= 10),
+        takeWhile(() => this.service.questionsCompleted() <= 10),
       )
       .subscribe(
         () => {
-          if (this.mathService.questionsCompleted() >= 10) {
+          if (this.service.questionsCompleted() >= 10) {
             if (this.userInput.value !== '') {
               this.validateExpression();
             }
@@ -103,15 +101,14 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
       .pipe(
         tap((t) => console.log(t)),
         filter(time => (time / 10) > 50),
-        switchMap(() => this.mathService.questions.pipe(map(questions => questions.length === 0))),
+        switchMap(() => this.service.questions.pipe(map(questions => questions.length === 0))),
       );
   }
 
   getNewMathExpression(addNewScore = 1): void {
-    this.mathService.generateExpression().pipe(take(1)).subscribe({
+    this.service.generateExpression().pipe(take(1)).subscribe({
       next: (exprResp: ExpressionResponse) => {
-        this.mathService.updateQuestions(exprResp.equation);
-        this.expression$.next(exprResp);
+        this.service.updateQuestions(exprResp);
         this.userInput.setValue('');
       },
       error: (error: unknown) => {
@@ -123,13 +120,13 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   }
 
   validateExpression(callbackFn?: () => void): void {
-    const userRequestToValidate: ValidatedRequest = { id: this.expression$.getValue()?.id || '', answer: this.input.nativeElement.value };
-    this.mathService.validateExpression(userRequestToValidate).pipe(take(1)).subscribe({
+    const userRequestToValidate = this.input.nativeElement.value;
+    this.service.validateExpression(userRequestToValidate).pipe(take(1)).subscribe({
       next: (validationResp: ValidatedResponse) => {
         if (validationResp.message === 'correct') {
-          this.mathService.setScore();
+          this.service.setScore();
         }
-        this.mathService.updateResponses(validationResp);
+        this.service.updateResponses(validationResp);
         /* the callback is added here because of the quirky asynchronous nature of JS. The final question would
         get successfully validated but the callee (event host listener) wouldn't see the result in time before
         moving on, resetting the timer 0, generating am 11th question, compounding issues. This solution might

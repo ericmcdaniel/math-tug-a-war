@@ -8,7 +8,7 @@ import { MathLogicService } from '../../services/math-logic.service';
   <div class="results-container">
     <p>You got {{ mathService.score | async }} correct!</p>
     <ol>
-      <li *ngFor="let question of (mathService.questions | async)">{{ question }}</li>
+      <li *ngFor="let question of (mathService.questions | async)">{{ question.equation }}</li>
     </ol>
   </div>
   `,
