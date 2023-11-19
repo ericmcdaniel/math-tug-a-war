@@ -1,22 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from '../../services/message.service';
+import { Location } from '@angular/common';
+import { AfterContentInit, Component } from '@angular/core';
+
+interface ErrorMessage {
+  message: string;
+};
 
 @Component({
   selector: 'app-error',
-  template: `<div>
-      <p>There was a fatal error:</p>
-      <p>{{ (messageService.errorMsg$.getValue())}}</p>
-    </div>`,
-  styles: []
+  template: `
+  <div class="card-container">
+    <div class="card-wrapper">
+      <h1 class="card-display-title">Yikes!</h1>
+      <h2 class="card-display-subtitle">There unfortunately was a fatal error</h2>
+      <p>{{ this.errorMessage }}</p>
+    </div>
+  </div>`
 })
-export class ErrorPage implements OnInit {
+export class ErrorPage implements AfterContentInit {
 
-  constructor(public messageService: MessageService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  errorMessage: string;
+  constructor(private location: Location) { }
 
-  ngOnInit(): void {
-    if (!this.messageService.errorMsg$.getValue()) {
-      this.router.navigate(['../'], { relativeTo: this.activatedRoute });
-    }
+  ngAfterContentInit(): void {
+    this.errorMessage = (this.location.getState() as ErrorMessage).message || '';
   }
 }

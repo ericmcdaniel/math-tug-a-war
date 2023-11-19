@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgxKatexModule } from 'ngx-katex';
 import { of } from 'rxjs';
-import { MessageService } from '../../../../core/services/message.service';
 import { MathLogicService } from '../../services/math-logic.service';
 import { MathGameComponent } from './math-game.component';
 
@@ -32,7 +31,6 @@ describe('MathGameComponent', () => {
       ],
       providers: [
         { provide: MathLogicService, useValue: mockService },
-        MessageService
       ]
     }).compileComponents();
     fixture = TestBed.createComponent(MathGameComponent);

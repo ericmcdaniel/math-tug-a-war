@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -60,6 +60,23 @@ export class MathLogicService {
 
   public validateExpression(request: ValidatedRequest): Observable<ValidatedResponse> {
     return this.http.post<ValidatedResponse>(environment.apiUrl + 'validate-answer', request);
+  }
+
+  public buildErrorResponse(response: unknown): string {
+    let errorMessageForUser: string;
+    if (response instanceof HttpErrorResponse) {
+      if (response.status === 0) {
+        // This is a special case for then the app can't even connect to the API, which HTTPClient interprets
+        // the status code as 0.
+        errorMessageForUser = response.message + '. This is most likely because the API server is not running.';
+      } else {
+        console.log(response);
+        errorMessageForUser = `${response.status} ${response.error.error}. ${response.error.message}`;
+      }
+    } else {
+      errorMessageForUser = JSON.stringify(response);
+    }
+    return errorMessageForUser;
   }
 
   public initialize(): void {

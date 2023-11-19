@@ -1,8 +1,6 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription, filter, fromEvent, interval, map, of, switchMap, take, takeWhile, tap, throttle, timer } from 'rxjs';
-import { MessageService } from '../../../../core/services/message.service';
 import { NumbersOnlyFormControl } from '../../directives/numbers-only.directive';
 import { ExpressionResponse } from '../../models/expression-response.model';
 import { ValidatedRequest } from '../../models/validation-request.model';
@@ -27,7 +25,6 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     public mathService: MathLogicService,
-    private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
@@ -98,7 +95,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   }
 
   displayResults(): void {
-    this.router.navigate(['../results'], { relativeTo: this.route });
+    this.router.navigate(['../results'], { relativeTo: this.route, state: { message: "WORDS WORDS WORDS" } });
   }
 
   userNeedsDirections(): Observable<boolean> {
@@ -111,20 +108,6 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
       );
   }
 
-  handleError(error: unknown) {
-    this.questionTimer$.unsubscribe();
-    if (error instanceof HttpErrorResponse) {
-      if (error.status === 0) {
-        this.messageService.errorMsg$.next(error.message + '. This is most likely because the API server is not running.');
-      } else {
-        this.messageService.errorMsg$.next(`${error.status} ${error.error.error}. ${error.error.message}`);
-      }
-    } else {
-      this.messageService.errorMsg$.next(JSON.stringify(error));
-    }
-    this.router.navigate(['../../error'], { relativeTo: this.route });
-  }
-
   getNewMathExpression(addNewScore = 1): void {
     this.mathService.generateExpression().pipe(take(1)).subscribe({
       next: (exprResp: ExpressionResponse) => {
@@ -134,7 +117,9 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
         this.userInput.setValue('');
       },
       error: (error: unknown) => {
-        this.handleError(error);
+        this.questionTimer$.unsubscribe();
+        const errorResp = this.mathService.buildErrorResponse(error);
+        this.router.navigate(['../../error'], { relativeTo: this.route, state: { message: errorResp } });
       }
     });
   }
@@ -154,7 +139,8 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
         if (callbackFn) callbackFn();
       },
       error: (error: unknown) => {
-        this.handleError(error);
+        const errorResp = this.mathService.buildErrorResponse(error);
+        this.router.navigate(['../../error'], { relativeTo: this.route, state: { message: errorResp } });
       }
     });
   }

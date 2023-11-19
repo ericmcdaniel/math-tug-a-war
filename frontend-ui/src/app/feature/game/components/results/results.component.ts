@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from '../../../../core/services/message.service';
 import { MathLogicService } from '../../services/math-logic.service';
 
 @Component({
@@ -11,7 +10,6 @@ import { MathLogicService } from '../../services/math-logic.service';
     <ol>
       <li *ngFor="let question of (mathService.questions | async)">{{ question }}</li>
     </ol>
-    <small>Future work: rendering which questions were correct/incorrect.</small>
   </div>
   `,
   styles: [
@@ -22,7 +20,7 @@ import { MathLogicService } from '../../services/math-logic.service';
 })
 export class ResultsComponent implements OnInit {
 
-  constructor(public mathService: MathLogicService, public msgService: MessageService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(public mathService: MathLogicService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.mathService.questions.subscribe(questions => {
