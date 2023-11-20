@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { NetworkService } from './network.service';
 
@@ -10,7 +10,7 @@ export class UserService {
 
   private user$: BehaviorSubject<boolean>;
 
-  constructor(private network: NetworkService, private router: Router, private route: ActivatedRoute) {
+  constructor(private network: NetworkService, private router: Router) {
     this.user$ = new BehaviorSubject<boolean>(false);
   }
 

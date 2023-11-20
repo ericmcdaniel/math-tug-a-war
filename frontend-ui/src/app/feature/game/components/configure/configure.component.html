@@ -1,5 +1,5 @@
 <h2 class="card-display-subtitle">Settings</h2>
-<form class="configuration-form" (ngSubmit)="onSubmit(configuration)" #configuration="ngForm">
+<form class="configuration-form" (ngSubmit)="onSubmit()">
   <mat-radio-group class="difficulty-options">
     <mat-radio-button class="difficulty-selection" *ngFor="let diff of difficulty" [value]="diff.toLowerCase()"
       (change)="getDifficulty(diff)">

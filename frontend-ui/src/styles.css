@@ -23,6 +23,11 @@ body {
 
 a {
   color: var(--text-color);
+  transition: scale 100ms ease;
+}
+
+a:hover {
+  scale: 105%;
 }
 
 .return-link {

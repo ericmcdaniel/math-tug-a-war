@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
 import { Difficulty, MathLogicService } from '../../services/math-logic.service';
@@ -22,7 +21,7 @@ export class ConfigureComponent implements OnInit {
   difficulty = ['Easy', 'Medium', 'Hard'];
   selectedDifficulty: Difficulty | undefined;
 
-  onSubmit(form: NgForm) {
+  onSubmit() {
     this.mathService.setDifficulty(this.selectedDifficulty as Difficulty);
     this.router.navigate(['play'], { relativeTo: this.route });
   }
@@ -30,5 +29,4 @@ export class ConfigureComponent implements OnInit {
   getDifficulty(difficulty: string) {
     this.selectedDifficulty = difficulty.toLowerCase() as Difficulty;
   }
-
 }
