@@ -21,16 +21,6 @@ jobs:
         with:
           java-version: '17'
 
-      - name: Set up environment variables
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-          envkey_DB_USER: ${{ secrets.DB_USER }}
-          envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          directory: backend-api/src/main/resources/
-          file_name: environment.properties
-          fail_on_empty: true
-
       - name: Build and Run Tests
         run: mvn clean install
 
