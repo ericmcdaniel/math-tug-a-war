@@ -5,9 +5,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExpressionTreeService {
     private Node root;
-    private String[] operators = { "+", "-", "*", "/" };
-    private String[] leftParenthesis = { "(", "\\big(", "\\Big(", "\\bigg(", "\\Bigg(", "\\Biggr(" };
-    private String[] rightParenthesis = { ")", "\\big)", "\\Big)", "\\bigg)", "\\Bigg)", "\\Biggr)" };
+    private static final String[] L_PAREN = { "(", "\\big(", "\\Big(", "\\bigg(", "\\Bigg(", "\\Biggr(" };
+    private static final String[] R_PAREN = { ")", "\\big)", "\\Big)", "\\bigg)", "\\Bigg)", "\\Biggr)" };
     private RandomInt random;
     private DifficultyProperties difficulty;
 
@@ -30,7 +29,7 @@ public class ExpressionTreeService {
     }
 
     private String generateOperator() {
-        return operators[random.nextInt(operators.length)];
+        return Node.OPERATORS[random.nextInt(Node.OPERATORS.length)];
     }
 
     private void handleSubtraction(Node node, int depth) {
@@ -101,11 +100,11 @@ public class ExpressionTreeService {
             node.left = generateSubTree(depth - 1, false);
             node.right = generateSubTree(depth - 1, false);
 
-            if ("-".equals(op)) {
+            if (op.equals(Node.SUBTRACT)) {
                 handleSubtraction(node, depth);
-            } else if ("/".equals(op)) {
+            } else if (op.equals(Node.DIVIDE)) {
                 handleDivision(node, depth);
-            } else if ("*".equals(op)) {
+            } else if (op.equals(Node.MULTIPLY)) {
                 handleMultiplication(node, depth);
             }
 
@@ -142,9 +141,9 @@ public class ExpressionTreeService {
 
         // Writing out the expression
         if (node.left != null && node.right != null) {
-            return leftParenthesis[depth - 2]
+            return L_PAREN[depth - 2]
                     + left + node.getValue() + right
-                    + rightParenthesis[depth - 2];
+                    + R_PAREN[depth - 2];
         }
         return node.getValue();
     }
@@ -169,19 +168,19 @@ public class ExpressionTreeService {
 
     private double errorCheck(Node node, double leftValue, double rightValue) {
         switch (node.value) {
-            case "+":
+            case Node.ADD:
                 return leftValue + rightValue;
-            case "-":
+            case Node.SUBTRACT:
                 if (rightValue > leftValue) {
                     throw new ArithmeticException("Negative Result");
                 }
                 return leftValue - rightValue;
-            case "*":
+            case Node.MULTIPLY:
                 if (leftValue > maxMultiply || rightValue > maxMultiply) {
                     throw new ArithmeticException("Multiplier operator too large");
                 }
                 return leftValue * rightValue;
-            case "/":
+            case Node.DIVIDE:
                 if (rightValue == 0) {
                     throw new ArithmeticException("Division by zero");
                 }

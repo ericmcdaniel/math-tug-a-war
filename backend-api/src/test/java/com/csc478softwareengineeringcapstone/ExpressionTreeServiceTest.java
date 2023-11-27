@@ -82,13 +82,11 @@ public class ExpressionTreeServiceTest {
   }
 
   public boolean isValidExpression(Node node) {
-    String[] operators = { "+", "-", "*", "/" };
-
     if (node == null) {
       return true;
     }
 
-    if (Arrays.asList(operators).contains(node.getValue())) {
+    if (Arrays.asList(Node.OPERATORS).contains(node.getValue())) {
       if (node.getLeft() == null || node.getRight() == null) {
         return false;
       }
