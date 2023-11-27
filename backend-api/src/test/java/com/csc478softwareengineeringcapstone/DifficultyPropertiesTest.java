@@ -1,9 +1,11 @@
 package com.csc478softwareengineeringcapstone;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.csc478softwareengineeringcapstone.services.DifficultyProperties;
 
@@ -38,6 +40,6 @@ class DifficultyPropertiesTest {
 
     @Test
     void testIsDivideByOne() {
-        assertTrue(difficultyProperties.isDivideByOne());
+        assertTrue(difficultyProperties.isDivisibleByOne());
     }
 }

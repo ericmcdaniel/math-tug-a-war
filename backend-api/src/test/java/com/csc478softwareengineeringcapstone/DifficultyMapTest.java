@@ -23,7 +23,7 @@ class DifficultyMapTest {
         assertEquals(2, properties.getDepth());
         assertEquals(9, properties.getMaxRandom());
         assertEquals(12, properties.getMaxMultiply());
-        assertEquals(true, properties.isDivideByOne());
+        assertEquals(true, properties.isDivisibleByOne());
     }
 
     @Test
@@ -33,7 +33,7 @@ class DifficultyMapTest {
         assertEquals(3, properties.getDepth());
         assertEquals(9, properties.getMaxRandom());
         assertEquals(12, properties.getMaxMultiply());
-        assertEquals(false, properties.isDivideByOne());
+        assertEquals(false, properties.isDivisibleByOne());
     }
 
     @Test
@@ -43,7 +43,7 @@ class DifficultyMapTest {
         assertEquals(4, properties.getDepth());
         assertEquals(9, properties.getMaxRandom());
         assertEquals(12, properties.getMaxMultiply());
-        assertEquals(false, properties.isDivideByOne());
+        assertEquals(false, properties.isDivisibleByOne());
     }
 
     @Test
@@ -59,6 +59,6 @@ class DifficultyMapTest {
         assertEquals(2, properties.getDepth());
         assertEquals(9, properties.getMaxRandom());
         assertEquals(12, properties.getMaxMultiply());
-        assertEquals(true, properties.isDivideByOne());
+        assertEquals(true, properties.isDivisibleByOne());
     }
 }

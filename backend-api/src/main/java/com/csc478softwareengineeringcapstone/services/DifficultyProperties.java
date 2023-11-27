@@ -4,13 +4,13 @@ public class DifficultyProperties {
     private int depth;
     private int maxRandom;
     private int maxMultiply;
-    private boolean divideByOne;
+    private boolean divisibleByOne;
 
-    public DifficultyProperties(int depth, int maxRandom, int maxMultiply, boolean divideByOne) {
+    public DifficultyProperties(int depth, int maxRandom, int maxMultiply, boolean divisibleByOne) {
         this.depth = depth;
         this.maxRandom = maxRandom;
         this.maxMultiply = maxMultiply;
-        this.divideByOne = divideByOne;
+        this.divisibleByOne = divisibleByOne;
     }
 
     public int getDepth() {
@@ -25,7 +25,7 @@ public class DifficultyProperties {
         return maxMultiply;
     }
 
-    public boolean isDivideByOne() {
-        return divideByOne;
+    public boolean isDivisibleByOne() {
+        return divisibleByOne;
     }
 }

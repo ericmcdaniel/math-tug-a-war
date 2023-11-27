@@ -13,7 +13,7 @@ public class ExpressionTreeService {
     private int maxDepth;
     private int maxRandom;
     private int maxMultiply;
-    private boolean isDivisiblyByOne;
+    private boolean isDivisibleByOne;
 
     public ExpressionTreeService(RandomInt random) {
         this.random = random;
@@ -55,9 +55,9 @@ public class ExpressionTreeService {
          * Perhaps a hard mode only check?
          */
         while (leftValue % rightValue != 0 || rightValue == 0
-                || (!this.isDivisiblyByOne && rightValue == 1)) {
+                || (!this.isDivisibleByOne && rightValue == 1)) {
 
-            if (leftValue == 1 && !this.isDivisiblyByOne && rightValue == 1) {
+            if (leftValue == 1 && !this.isDivisibleByOne && rightValue == 1) {
                 node.left = generateSubTree(depth - 1, false);
                 leftValue = evaluate(node.left);
             }
@@ -118,7 +118,7 @@ public class ExpressionTreeService {
         this.maxDepth = this.difficulty.getDepth();
         this.maxRandom = this.difficulty.getMaxRandom();
         this.maxMultiply = this.difficulty.getMaxMultiply();
-        this.isDivisiblyByOne = this.difficulty.isDivideByOne();
+        this.isDivisibleByOne = this.difficulty.isDivisibleByOne();
 
         this.root = generateSubTree(this.maxDepth, true);
         int actualHeight = getTreeHeight(this.root);
@@ -184,7 +184,7 @@ public class ExpressionTreeService {
                 if (rightValue == 0) {
                     throw new ArithmeticException("Division by zero");
                 }
-                if (!isDivisiblyByOne && rightValue == 1) {
+                if (!isDivisibleByOne && rightValue == 1) {
                     throw new ArithmeticException("Division by one");
                 }
                 return leftValue / rightValue;
