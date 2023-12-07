@@ -19,7 +19,9 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
 
   public userInput = new NumbersOnlyFormControl('');
   public progressTimer$: Observable<number>;
+  public progressTimerSubscription$: Subscription;
   public questionTimer$: Subscription;
+  public time: number;
 
   constructor(
     public service: MathLogicService,
@@ -74,7 +76,11 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
     if (this.questionTimer$ && !this.questionTimer$.closed) this.questionTimer$.unsubscribe();
     this.questionTimer$ = timer(0, 10000)
       .pipe(
-        tap(() => this.progressTimer$ = timer(0, 10)),
+        tap(() => {
+          if (this.progressTimerSubscription$ && !this.progressTimerSubscription$.closed) this.progressTimerSubscription$.unsubscribe();
+          this.progressTimer$ = timer(0, 10);
+          this.progressTimerSubscription$ = this.progressTimer$.subscribe(time => this.time = 1000 - time);
+        }),
         takeWhile(() => this.service.questionsCompleted() <= 10),
       )
       .subscribe(
@@ -92,7 +98,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   }
 
   displayResults(): void {
-    this.router.navigate(['../results'], { relativeTo: this.route, state: { message: "WORDS WORDS WORDS" } });
+    this.router.navigate(['../results'], { relativeTo: this.route });
   }
 
   userNeedsDirections(): Observable<boolean> {
@@ -105,7 +111,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
       );
   }
 
-  getNewMathExpression(addNewScore = 1): void {
+  getNewMathExpression(): void {
     this.service.generateExpression().pipe(take(1)).subscribe({
       next: (exprResp: ExpressionResponse) => {
         this.service.updateQuestions(exprResp);
@@ -124,7 +130,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
     this.service.validateExpression(userRequestToValidate).pipe(take(1)).subscribe({
       next: (validationResp: ValidatedResponse) => {
         if (validationResp.message === 'correct') {
-          this.service.setScore();
+          this.service.incrementScore(this.time);
         }
         this.service.updateResponses(validationResp);
         /* the callback is added here because of the quirky asynchronous nature of JS. The final question would

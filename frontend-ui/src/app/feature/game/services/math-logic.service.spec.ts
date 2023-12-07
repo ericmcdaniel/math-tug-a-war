@@ -45,7 +45,7 @@ describe('MathLogicService', () => {
 
   it('should update the score', async () => {
     const previousScore = (await firstValueFrom(service.score));
-    service.setScore();
-    expect(previousScore + 1).toEqual((await firstValueFrom(service.score)));
+    service.incrementScore(300);
+    expect(previousScore + 300).toEqual((await firstValueFrom(service.score)));
   });
 });

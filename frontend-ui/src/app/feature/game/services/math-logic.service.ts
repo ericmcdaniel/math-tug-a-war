@@ -31,8 +31,8 @@ export class MathLogicService {
     return this.score$.asObservable();
   }
 
-  public setScore(): void {
-    this.score$.next(this.score$.getValue() + 1);
+  public incrementScore(time: number): void {
+    this.score$.next(this.score$.getValue() + time);
   }
 
   get questions(): Observable<ExpressionResponse[]> {
