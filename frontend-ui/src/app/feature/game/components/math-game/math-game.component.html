@@ -4,8 +4,10 @@
   <input #solution [formControl]="userInput" type="text" maxlength="3">
 </div>
 <form class="playable-game">
-  <p>{{ score }} Points</p>
-  <p>Question {{ (service.questions | async)?.length }} of 10</p>
+  <div class="status-info">
+    <p>Question {{ (service.questions | async)?.length }} of 10</p>
+    <p>{{ score }} Points</p>
+  </div>
   <div class="progress-bar">
     <mat-progress-bar *ngIf="progressTimer$ | async as time" color="primary" [value]="time / 10"></mat-progress-bar>
   </div>

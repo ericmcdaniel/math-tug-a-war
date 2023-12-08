@@ -19,7 +19,6 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
 
   public userInput = new NumbersOnlyFormControl('');
   public progressTimer$: Observable<number>;
-  public progressTimerSubscription$: Subscription;
   public questionTimer$: Subscription;
   public time: number;
   public score: number;
@@ -80,9 +79,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
     this.questionTimer$ = timer(0, 10000)
       .pipe(
         tap(() => {
-          if (this.progressTimerSubscription$ && !this.progressTimerSubscription$.closed) this.progressTimerSubscription$.unsubscribe();
-          this.progressTimer$ = timer(0, 10);
-          this.progressTimerSubscription$ = this.progressTimer$.subscribe(time => this.time = 1000 - time);
+          this.progressTimer$ = timer(0, 10).pipe(tap(time => this.time = 1000 - time));
         }),
         takeWhile(() => this.service.questionsCompleted() <= 10),
       )
@@ -134,6 +131,9 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
       next: (validationResp: ValidatedResponse) => {
         if (validationResp.message === 'correct') {
           this.score += this.time;
+          if (this.time === 0) {
+            console.error("Score as not calculated correctly.");
+          }
         }
         this.service.updateResponses(validationResp);
         /* the callback is added here because of the quirky asynchronous nature of JS. The final question would

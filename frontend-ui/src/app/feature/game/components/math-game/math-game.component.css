@@ -40,6 +40,11 @@ input[type="text"] {
   width: 3ch;
 }
 
+.status-info {
+  display: flex;
+  justify-content: space-between;
+}
+
 .progress-bar {
   margin-top: 1rem;
 }
