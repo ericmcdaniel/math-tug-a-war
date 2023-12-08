@@ -12,7 +12,7 @@ interface ScoreMessage {
   <div class="results-container">
     <p>You scored {{ score }} points!</p>
     <ol>
-      <li *ngFor="let question of (mathService.questions | async)">{{ question.equation }}</li>
+      <li *ngFor="let question of (mathService.questions | async)">{{ removeLatex(question.equation) }}</li>
     </ol>
   </div>
   `,
@@ -38,5 +38,18 @@ export class ResultsComponent implements OnInit {
 
   ngAfterContentInit(): void {
     this.score = Number((this.location.getState() as ScoreMessage).message || 0);
+  }
+
+  removeLatex(equation: string): string {
+    return equation.replaceAll('\\times', '×')
+      .replaceAll('\\div', '÷')
+      .replaceAll('\\big(', '(')
+      .replaceAll('\\bigg(', '(')
+      .replaceAll('\\Big(', '(')
+      .replaceAll('\\Bigg(', '(')
+      .replaceAll('\\big)', ')')
+      .replaceAll('\\bigg)', ')')
+      .replaceAll('\\Big)', ')')
+      .replaceAll('\\Bigg)', ')');
   }
 }
