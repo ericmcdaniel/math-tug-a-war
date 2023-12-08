@@ -6,6 +6,7 @@ import { MathLogicService } from '../../services/math-logic.service';
 interface ScoreMessage {
   message: string;
 };
+
 @Component({
   selector: 'app-results',
   template: `

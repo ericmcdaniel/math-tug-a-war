@@ -19,7 +19,6 @@ describe('MathGameComponent', () => {
       generateExpression: jest.fn(() => of(MOCK_MATH_RESPONSE)),
       validateExpression: jest.fn(() => of(MOCK_MATH_VALIDATION)),
       initialize: jest.fn(() => { }),
-      incrementScore: jest.fn(() => { }),
     };
     TestBed.configureTestingModule({
       declarations: [MathGameComponent],
