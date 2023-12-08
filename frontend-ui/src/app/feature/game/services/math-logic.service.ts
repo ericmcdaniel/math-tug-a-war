@@ -14,25 +14,15 @@ export type Difficulty = 'easy' | 'medium' | 'hard';
 export class MathLogicService {
 
   private difficulty$: BehaviorSubject<Difficulty>;
-  private score$: BehaviorSubject<number>;
   private questions$: BehaviorSubject<ExpressionResponse[]>;
   private currentExpression$: BehaviorSubject<ExpressionResponse | undefined>;
   private responses$: BehaviorSubject<Omit<ValidatedResponse, 'message'>[]>;
 
   constructor(private network: NetworkService) {
     this.difficulty$ = new BehaviorSubject<Difficulty>('easy');
-    this.score$ = new BehaviorSubject<number>(0);
     this.questions$ = new BehaviorSubject<ExpressionResponse[]>([]);
     this.currentExpression$ = new BehaviorSubject<ExpressionResponse | undefined>(undefined);
     this.responses$ = new BehaviorSubject<Omit<ValidatedResponse, 'message'>[]>([]);
-  }
-
-  get score(): Observable<number> {
-    return this.score$.asObservable();
-  }
-
-  public incrementScore(time: number): void {
-    this.score$.next(this.score$.getValue() + time);
   }
 
   get questions(): Observable<ExpressionResponse[]> {
@@ -77,7 +67,6 @@ export class MathLogicService {
   }
 
   public initialize(): void {
-    this.score$ = new BehaviorSubject<number>(0);
     this.questions$ = new BehaviorSubject<ExpressionResponse[]>([]);
   }
 

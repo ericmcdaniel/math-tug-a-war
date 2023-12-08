@@ -1,12 +1,16 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MathLogicService } from '../../services/math-logic.service';
 
+interface ScoreMessage {
+  message: string;
+};
 @Component({
   selector: 'app-results',
   template: `
   <div class="results-container">
-    <p>You got {{ mathService.score | async }} correct!</p>
+    <p>You scored {{ score }} points!</p>
     <ol>
       <li *ngFor="let question of (mathService.questions | async)">{{ question.equation }}</li>
     </ol>
@@ -20,7 +24,9 @@ import { MathLogicService } from '../../services/math-logic.service';
 })
 export class ResultsComponent implements OnInit {
 
-  constructor(public mathService: MathLogicService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  score: number;
+
+  constructor(public mathService: MathLogicService, private router: Router, private activatedRoute: ActivatedRoute, private location: Location) { }
 
   ngOnInit(): void {
     this.mathService.questions.subscribe(questions => {
@@ -28,5 +34,9 @@ export class ResultsComponent implements OnInit {
         this.router.navigate(['../'], { relativeTo: this.activatedRoute });
       }
     });
+  }
+
+  ngAfterContentInit(): void {
+    this.score = Number((this.location.getState() as ScoreMessage).message || 0);
   }
 }

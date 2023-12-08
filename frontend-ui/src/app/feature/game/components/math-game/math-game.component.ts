@@ -22,12 +22,15 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   public progressTimerSubscription$: Subscription;
   public questionTimer$: Subscription;
   public time: number;
+  public score: number;
 
   constructor(
     public service: MathLogicService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.score = 0;
+  }
 
   /*
    * if the user clicks away from the input textbox, automatically refocus on to the element
@@ -98,7 +101,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
   }
 
   displayResults(): void {
-    this.router.navigate(['../results'], { relativeTo: this.route });
+    this.router.navigate(['../results'], { relativeTo: this.route, state: { message: this.score } });
   }
 
   userNeedsDirections(): Observable<boolean> {
@@ -130,7 +133,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
     this.service.validateExpression(userRequestToValidate).pipe(take(1)).subscribe({
       next: (validationResp: ValidatedResponse) => {
         if (validationResp.message === 'correct') {
-          this.service.incrementScore(this.time);
+          this.score += this.time;
         }
         this.service.updateResponses(validationResp);
         /* the callback is added here because of the quirky asynchronous nature of JS. The final question would
