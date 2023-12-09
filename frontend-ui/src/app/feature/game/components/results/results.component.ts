@@ -7,6 +7,9 @@ interface ScoreMessage {
   message: string;
 };
 
+/**
+ * Render the results to the user after their game expires
+ */
 @Component({
   selector: 'app-results',
   template: `

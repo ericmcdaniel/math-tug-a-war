@@ -7,6 +7,11 @@ import { ExpressionResponse } from '../../models/expression-response.model';
 import { ValidatedResponse } from '../../models/validation-response.model';
 import { MathLogicService } from '../../services/math-logic.service';
 
+/**
+ * The main logical component which handles the game, scoring, and timing logic.
+ * The MathLogicService is a dependency to extract some of the irrevelant details,
+ * such as making HTTP calls.
+ */
 @Component({
   selector: 'app-math-game',
   templateUrl: './math-game.component.html',
@@ -79,6 +84,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
     this.questionTimer$ = timer(0, 10000)
       .pipe(
         tap(() => {
+          // start the timer for both the progress bar and keep a record of the time for score keeping
           this.progressTimer$ = timer(0, 10).pipe(tap(time => this.time = 1000 - time));
         }),
         takeWhile(() => this.service.questionsCompleted() <= 10),
@@ -117,6 +123,7 @@ export class MathGameComponent implements AfterViewInit, OnDestroy {
         this.service.updateQuestions(exprResp);
         this.userInput.setValue('');
       },
+      // directly take any network response errors back to the error page
       error: (error: unknown) => {
         this.questionTimer$.unsubscribe();
         const errorResp = NetworkService.buildErrorResponse(error);

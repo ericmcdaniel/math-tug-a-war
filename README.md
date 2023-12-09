@@ -11,14 +11,10 @@
 ## Purpose
 This is a full-stack web application designed, architected, developed, tested, documented, and deployed as a Fall '23 semester-long group project for the University of Illinois - Springfield's CSC 478 Software Engineering Capstone.
 
+The Math Tug-a-War is a fast-paced single-player game that helps students, hobbyists, children, and math enthusiasts compete in a controlled environment for the highest score possible. Users are given the ability to select their preferred difficulty level, ranging from easy to hard. Users must answer these rapid-fire questions as quickly as possible before the timer expires. The game concludes after ten questions have been completed, and the user can see their score.
+
 
 ---
 ##  Getting Started
 
-There is a *ton* more to fill out here, but I'm just laying out the groundwork. The general project structure is:
-
-```
-           /‾‾‾ /backend-api => Contains the Java Spring Boot API layer
-(root) --> ⎸
-           \___ /frontend-ui => Contains the Angular frontend UI layer
-```
+This is a monorepo composed of two services, a Backend API written in Java Spring Boot, and a Frontend UI written in Angular. To get started, follow the installation instruction provided in `Installation Instructions.pdf` to begin.
